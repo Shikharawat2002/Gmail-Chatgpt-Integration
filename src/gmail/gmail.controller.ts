@@ -6,11 +6,11 @@ import { GmailService } from './gmail.service';
 
 @Controller('google')
 export class GmailController {
-  constructor(private readonly gmailService: GmailService) {}
+  constructor(private readonly gmailService: GmailService) { }
 
   @Get()
   @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {}
+  async googleAuth(@Req() req) { }
 
   @Get('redirect')
   @UseGuards(AuthGuard('google'))
