@@ -10,7 +10,7 @@ export class BookService {
         @InjectModel('Booksc') private readonly BookModel: Model<BookDocument>,
     ) { }
 
-    //create user 
+    //create book
     async createBooksc(currentBook: Booksc): Promise<Booksc> {
         const newBook = new this.BookModel(currentBook)
         return newBook.save()

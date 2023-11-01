@@ -8,6 +8,7 @@ import { BookSchema } from "./schemas/book.schema";
 
 @Module({
     imports:[
+        // method to configure the module, including defining which models should be registered in the current scope.
         MongooseModule.forFeature([{name:'Booksc', schema:BookSchema}])
     ],
     controllers:[BookController],

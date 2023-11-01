@@ -7,8 +7,25 @@ export class AppService {
     return 'Hello user';
   }
 
-  findId(@Param() userid:string): string {
-    console.log("Param.Id", userid)
-    return `the id is ${userid}`
+
+  googleLogin(req)
+  {
+    if(!req.user)
+    {
+      return 'no user from google';
+    }
+    return {
+      message: 'User information from google',
+      user: req.user
+    }
   }
+
+  // addUser():{
+    
+  // }
+
+  // findId( userid:string): string {
+  //   console.log("Param.Id", userid)
+  //   return `the id is ${userid}`
+  // }
 }

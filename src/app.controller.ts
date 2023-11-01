@@ -1,26 +1,25 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
+import { AuthGuard } from '@nestjs/passport';
 
-// @Controller()
-// export class AppController {
-//   constructor(private readonly appService: AppService) {}
 
-//  
-// }
-
-@Controller('user')
+@Controller('book')
 export class AppController {
   constructor(private readonly appService: AppService) { }
-
 
   @Get()
   greatUser(): string {
     return this.appService.greetUser();
   }
 
-  @Get(':userid')
-  findId(@Param('userid') userid: string): string {
-    return this.appService.findId(userid);
-  }
+  // @Post()
+  // addUser(){
+  //   return this.appService.addUser();
+  // }
+
+  // @Get(':userid')
+  // findId(@Param('userid') userid: string): string {
+  //   return this.appService.findId(userid);
+  // }
 }
 

@@ -4,6 +4,7 @@ import { Document } from "mongoose";
 export type BookDocument = Booksc & Document
 
 @Schema()
+// this is model 
 export class Booksc{
     @Prop()
     title:string;
@@ -13,6 +14,7 @@ export class Booksc{
 
     @Prop()
     published:string;
+    static title: string;
 
     // @Prop({default:Date.now})
     // date:Date; 
