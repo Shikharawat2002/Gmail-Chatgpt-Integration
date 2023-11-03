@@ -1,6 +1,5 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
-
 import { Injectable } from '@nestjs/common';
 
 
@@ -12,8 +11,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: '277824635101-k3aogsdivvl06bo4v366evrk2t63o9vs.apps.googleusercontent.com',
       clientSecret: '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',
-      callbackURL: 'http://localhost:3000/google/redirect',
-
+      callbackURL: 'https://developers.google.com/oauthplayground',
       scope: ['email', 'profile'],
     });
   }
@@ -26,6 +24,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       lastName: name.familyName,
       accessToken
     }
-    return user;
+    done(null, user);
   }
 }

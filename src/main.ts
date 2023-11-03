@@ -7,12 +7,12 @@ dotenv.config();
 
 function globalMiddleware1(req:Request , res:Response, next:NextFunction)
 {
-  console.log("Global Middleware1....");
+  // console.log("Global Middleware1....");
   next();
 }
 
 function globalMiddleware2(req:Request, res:Response, next:NextFunction){
-  console.log("Second middleware.....");
+  // console.log("Second middleware.....");
   next();
 }
 async function bootstrap() {

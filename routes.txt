@@ -1,0 +1,4 @@
+start--> localhost:3000/google
+Inbox--->  @Get('gmail/inbox/')
+ReadMessage--->@Get('gmail/Inbox/readmessage/:messageId')
+

@@ -18,6 +18,6 @@ import { BookSchema } from "./schemas/book.schema";
 export class BookModule implements NestModule{
  configure(_consumer:MiddlewareConsumer)
  {
-    _consumer.apply(BookMiddleware).forRoutes('book');
+    // _consumer.apply(BookMiddleware).forRoutes('book');
  }
 }

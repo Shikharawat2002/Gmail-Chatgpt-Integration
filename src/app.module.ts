@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GoogleStrategy } from './gmail/google.strategy';
 import { GmailModule } from './gmail/gmail.module';
-import nodemailer from 'nodemailer'
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [GmailModule],
+  imports: [GmailModule,PassportModule],
   controllers: [AppController],
   providers: [AppService],
 })
+
 export class AppModule {}
