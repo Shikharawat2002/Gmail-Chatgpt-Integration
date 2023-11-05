@@ -9,11 +9,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   constructor() {
     super({
-      clientID: '277824635101-k3aogsdivvl06bo4v366evrk2t63o9vs.apps.googleusercontent.com',
-      clientSecret: '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',
-      callbackURL: 'https://developers.google.com/oauthplayground',
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+      callbackURL: process.env.REDIRECT_URI,
       scope: ['email', 'profile'],
+     
     });
+    console.log("clientid", process.env.GOOGLE_CLIENT_ID)
+    console.log("clientSecret", process.env.GOOGLE_SECRET)
+    console.log("callbackurl", process.env.REDIRECT_URI)
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
