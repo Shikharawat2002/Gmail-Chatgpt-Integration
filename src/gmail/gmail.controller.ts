@@ -1,5 +1,5 @@
 
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GmailService } from './gmail.service';
 import { GoogleStrategy } from './google.strategy';
@@ -11,54 +11,75 @@ import { AxiosResponse } from 'axios';
 export class GmailController {
   constructor(private readonly gmailService: GmailService,
     private readonly gmailInboxService: GmailInboxService,
-    private readonly gmailSendService:GmailSendService,
-    private readonly googleStrategy: GoogleStrategy) { }
+    private readonly gmailSendService: GmailSendService,
+    // private readonly googleStrategy: GoogleStrategy
+    ) { }
 
   @Get()
   @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {
+  async googleAuth(@Req() req, @Res() res) {
+
+    console.log('response::::', res)
   }
+
+
+  // @Get('auth/google/callback')
+  // @UseGuards(AuthGuard('google'))
+  // googleLoginCallback(@Req() req: Request, @Res() res: Response) {
+  //   console.log("res::::", res)
+  // }
+
+  // @Get('auth/google/callback')
+  // @UseGuards(AuthGuard('google'))
+  // googleAuthRedirect(@Req() req) {
+  //   console.log('res:::')
+  //   return this.gmailService.googleLogin(req);
+
+  // }
 
   @Get('redirect')
   @UseGuards(AuthGuard('google'))
   googleAuthRedirect(@Req() req) {
     return this.gmailService.googleLogin(req)
   }
- 
+
+
+  @Get('gmail/inbox/unread')
+  getInboxUnread() {
+    console.log('in route:::')
+    return this.gmailInboxService.getInboxUnread();
+  }
+
   @Get('gmail/inbox/')
-  getInbox()
-  {
-    return this.gmailInboxService.getInbox();
+  getInbox(@Query('inboxid') inboxId: string,
+    @Query('accessToken') accessToken: string,) {
+    return this.gmailInboxService.getInbox(inboxId, accessToken);
+  }
+
+  @Get('gmail/sent')
+  getSentmessage() {
+    return this.gmailInboxService.getSentMessage();
+  }
+
+  @Get('gmail/draft')
+  getDraftMessage() {
+    return this.gmailInboxService.getDraftMessage();
   }
   @Get('gmail/Inbox/readmessage/:messageId')
-  getReadMessage(@Param('messageId') messageId: string)
-  {
+  getReadMessage(@Param('messageId') messageId: string) {
     return this.gmailInboxService.getReadMessage(messageId)
   }
 
   @Post('generate-response')
-  async generateEmailResponse(@Body() data: { prompt: string }) {
-    const response = await this.gmailSendService.generateEmailResponse(data.prompt);
+  async generateEmailResponse(@Body() data: { prompt: string, input: string }) {
+    const response = await this.gmailSendService.generateEmailResponse(data.prompt, data.input);
     return { response };
   }
-  
+
   @Post('send-email')
-async sendEmail(@Body() emailContent: any): Promise<AxiosResponse<any>> {
-  return this.gmailSendService.sendMail(emailContent);
-}
+  async sendEmail(@Body() emailContent: any): Promise<AxiosResponse<any>> {
+    return this.gmailSendService.sendMail(emailContent);
+  }
 
 
-  // @Post('send-email')
-  // async sendEmail(
-  //   // @Body() data: { recipient: string; subject: string; body: string; accessToken: string },
-  // ) {
-  //   const response = await this.gmailSendService.sendMail(
-  //     // data.recipient,
-  //     // data.subject,
-  //     // data.body,
-  //     // data.accessToken,
-  //   );
-  //   return { response };
-  // }
- 
 }

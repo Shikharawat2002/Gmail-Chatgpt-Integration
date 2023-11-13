@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { google } from 'googleapis';
 const imaps = require('imap-simple');
-// import { simpleParser } from 'mailparser';
-// import _ from 'lodash';
 
-
-// Initialize the OAuth2 client with your credentials
 const oauth2Client = new google.auth.OAuth2(
     '277824635101-k3aogsdivvl06bo4v366evrk2t63o9vs.apps.googleusercontent.com',
     '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',
@@ -38,13 +34,14 @@ export class GmailService {
 
 
     googleLogin(req) {
+        console.log('req:::', req.user.accessToken)
         if (!req.user) {
             return 'No user from google'
         }
 
         return {
             message: 'User information from google',
-            user: req.user
+            user: JSON.stringify(req.user)
         }
     }
 
@@ -78,7 +75,7 @@ export class GmailService {
     // }
 
     async getEmailSubject() {
-        console.log('here in function:::')
+        // console.log('here in function:::')
         const config = {
             imap: {
                 user: 'shikhatesting98@gmail.com',
@@ -113,8 +110,4 @@ export class GmailService {
             });
         });
     }
-
-
-
-
 }
