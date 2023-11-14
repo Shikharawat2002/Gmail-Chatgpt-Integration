@@ -13,7 +13,7 @@ export class GmailInboxService {
         };
     };
 
-    async getInbox(id: string, accessToken:string): Promise<AxiosResponse<any>> {
+    async getInbox(id: string, accessToken: string): Promise<[]> {
         try {
             const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages?q=label:inbox`;
 
@@ -22,6 +22,7 @@ export class GmailInboxService {
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             let messages = response.data.messages;
+            console.log(response.data.messages);
             return response.data.messages;
         } catch (error) {
             console.log(error);
@@ -29,19 +30,29 @@ export class GmailInboxService {
         }
     }
 
-    async getInboxUnread(): Promise<[]> {
+    // async getMailList(inboxid: string, accessToken: string) {
+    //     try {
+    //         const mails = await this.getInbox(inboxid, accessToken);
+    //         console.log("RESPONSE GET MAIL", mails);
+    //         const messageID = mails.map((item) => item?.id);
+    //         console.log("messageID", messageID)
+    //     } catch (error) {
+    //         console.log("error", error);
+    //     }
+    // }
+
+    async getInboxUnread(id: string, accessToken: string): Promise<[]> {
         try {
-            console.log('in service:::')
-            console.log('process', process.env.ACCESS_TOKEN);
-            const url = `https://gmail.googleapis.com/gmail/v1/users/shikha.rawat@ailoitte.com/messages?q=label:inbox+is:unread`;
+            // console.log('in service:::')
+            // console.log('process', process.env.ACCESS_TOKEN);
+            const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages?q=label:inbox+is:unread`;
 
             // const url = `https://gmail.googleapis.com/gmail/v1/users/shikha.rawat@ailoitte.com/gmail.labels`; //https://www.googleapis.com/auth/gmail.labels
             // const url = `https://www.googleapis.com/gmail/v1/users/me/messages`
-            const token = process.env.ACCESS_TOKEN;
-            const config = this.generateConfig(url, token);
+            const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             // console.log('res', response)
-            console.log("Data:::", response?.data)
+            // console.log("Data:::", response?.data)
             return response.data.messages;
         } catch (error) {
             console.log(error);
@@ -49,15 +60,14 @@ export class GmailInboxService {
         }
     }
 
-    async getSentMessage(): Promise<AxiosResponse<any>> {
+    async getSentMessage(id: string, accessToken: string): Promise<AxiosResponse<any>> {
         try {
 
-            const url = `https://gmail.googleapis.com/gmail/v1/users/shikha.rawat@ailoitte.com/messages?q=label:sent`;
+            const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages?q=label:sent`;
 
             // const url = `https://gmail.googleapis.com/gmail/v1/users/shikha.rawat@ailoitte.com/gmail.labels`; //https://www.googleapis.com/auth/gmail.labels
             // const url = `https://www.googleapis.com/gmail/v1/users/me/messages`
-            const token = process.env.ACCESS_TOKEN;
-            const config = this.generateConfig(url, token);
+            const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             let messages = response.data.messages;
             // console.log('messages', messages);
@@ -73,15 +83,15 @@ export class GmailInboxService {
     }
 
 
-    async getDraftMessage(): Promise<AxiosResponse<any>> {
+    async getDraftMessage(id: string, accessToken: string): Promise<AxiosResponse<any>> {
         try {
 
-            const url = `https://gmail.googleapis.com/gmail/v1/users/shikha.rawat@ailoitte.com/messages?q=label:drafts`;
+            const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages?q=label:drafts`;
 
             // const url = `https://gmail.googleapis.com/gmail/v1/users/shikha.rawat@ailoitte.com/gmail.labels`; //https://www.googleapis.com/auth/gmail.labels
             // const url = `https://www.googleapis.com/gmail/v1/users/me/messages`
             const token = process.env.ACCESS_TOKEN;
-            const config = this.generateConfig(url, token);
+            const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             let messages = response.data.messages;
             console.log('messages', messages);
@@ -98,11 +108,10 @@ export class GmailInboxService {
 
 
 
-    async getReadMessage(messageId): Promise<AxiosResponse<any>> {
+    async getReadMessage(messageId: string, id: string, accessToken: string): Promise<AxiosResponse<any>> {
         try {
-            const url = `https://gmail.googleapis.com/gmail/v1/users/shikha.rawat@ailoitte.com/messages/${messageId}`;
-            const token = process.env.ACCESS_TOKEN;
-            const config = this.generateConfig(url, token);
+            const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages/${messageId}`;
+            const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             // console.log('res', response)
             return response.data;

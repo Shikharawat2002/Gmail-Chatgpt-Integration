@@ -12,8 +12,7 @@ export class GmailController {
   constructor(private readonly gmailService: GmailService,
     private readonly gmailInboxService: GmailInboxService,
     private readonly gmailSendService: GmailSendService,
-    // private readonly googleStrategy: GoogleStrategy
-    ) { }
+    private readonly googleStrategy: GoogleStrategy) { }
 
   @Get()
   @UseGuards(AuthGuard('google'))
@@ -43,12 +42,11 @@ export class GmailController {
     return this.gmailService.googleLogin(req)
   }
 
-
-  @Get('gmail/inbox/unread')
-  getInboxUnread() {
-    console.log('in route:::')
-    return this.gmailInboxService.getInboxUnread();
-  }
+  // @Get('mail')
+  // getmailList(@Query('inboxid') inboxId: string,
+  //   @Query('accessToken') accessToken: string,) {
+  //   return this.gmailInboxService.getMailList(inboxId, accessToken)
+  // }
 
   @Get('gmail/inbox/')
   getInbox(@Query('inboxid') inboxId: string,
@@ -56,18 +54,40 @@ export class GmailController {
     return this.gmailInboxService.getInbox(inboxId, accessToken);
   }
 
+
+  @Get('gmail/inbox/unread')
+  getInboxUnread(
+    @Query('inboxid') inboxId: string,
+    @Query('accessToken') accessToken: string,
+  ) {
+    console.log('in route:::')
+    return this.gmailInboxService.getInboxUnread(inboxId, accessToken);
+  }
+
+
   @Get('gmail/sent')
-  getSentmessage() {
-    return this.gmailInboxService.getSentMessage();
+  getSentmessage(
+    @Query('inboxid') inboxId: string,
+    @Query('accessToken') accessToken: string,
+  ) {
+    return this.gmailInboxService.getSentMessage(inboxId, accessToken);
   }
 
   @Get('gmail/draft')
-  getDraftMessage() {
-    return this.gmailInboxService.getDraftMessage();
+  getDraftMessage(
+    @Query('inboxid') inboxId: string,
+    @Query('accessToken') accessToken: string,
+  ) {
+    return this.gmailInboxService.getDraftMessage(inboxId, accessToken);
   }
-  @Get('gmail/Inbox/readmessage/:messageId')
-  getReadMessage(@Param('messageId') messageId: string) {
-    return this.gmailInboxService.getReadMessage(messageId)
+
+
+  @Get('gmail/Inbox/readmessage')
+  getReadMessage(@Query('messageId') messageId: string,
+    @Query('inboxid') inboxId: string,
+    @Query('accessToken') accessToken: string,
+  ) {
+    return this.gmailInboxService.getReadMessage(messageId, inboxId, accessToken)
   }
 
   @Post('generate-response')

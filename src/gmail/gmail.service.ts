@@ -45,34 +45,9 @@ export class GmailService {
         }
     }
 
-    // Create a Gmail API client
-    // async getInboxMessages(accessToken: string) {
-    //     oauth2Client.setCredentials({ access_token: accessToken, scope: 'https://mail.google.com/' });
-    //     // Set the access token for making requests
-    //     // this.gmail.options({ auth: accessToken });
+  
 
-    //     try {
-    //         // Fetch the user's inbox messages
-    //         console.log('hi', JSON.stringify(this.gmail.users.messages.list({ userId: 'me' })))
-    //         // const response = await this.gmail.users.messages.list({
-    //         //     access_token: accessToken,
-    //         //     userId: 'me',
-    //         //     labelIds: ['INBOX'], // Fetch messages from the inbox
-    //         // });
-    //         // console.log("response", response)
-
-
-    //         // // Extract the list of messages
-    //         // const messages = response.data.messages;
-    //         // console.log("messages", messages)
-
-    //         // // You can iterate through the messages and fetch their details if needed
-    //         // return messages;
-    //     } catch (error) {
-    //         // Handle errors
-    //         throw error;
-    //     }
-    // }
+  
 
     async getEmailSubject() {
         // console.log('here in function:::')
