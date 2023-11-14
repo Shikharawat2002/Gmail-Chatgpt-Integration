@@ -8,6 +8,6 @@ import { GmailSendService } from './gmailSend.service';
 @Module({
   imports: [],
   controllers: [GmailController],
-  providers: [GmailService, GoogleStrategy, GmailInboxService,GmailSendService],
+  providers: [GmailService, GoogleStrategy, GmailInboxService, GmailSendService],
 })
 export class GmailModule { }

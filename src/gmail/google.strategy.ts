@@ -1,6 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
+const url = require('url');
 
 
 
@@ -11,23 +12,32 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: process.env.REDIRECT_URI,
+      callbackURL: 'http://localhost:3000/google/redirect', //process.env.REDIRECT_URI,
       scope: ['email', 'profile'],
-     
+      passReqToCallback: false
+
     });
-    console.log("clientid", process.env.GOOGLE_CLIENT_ID)
-    console.log("clientSecret", process.env.GOOGLE_SECRET)
-    console.log("callbackurl", process.env.REDIRECT_URI)
+    // console.log("clientid", process.env.GOOGLE_CLIENT_ID)
+    // console.log("clientSecret", process.env.GOOGLE_SECRET)
+    // console.log("callbackurl", process.env.REDIRECT_URI)
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
-    const { name, emails, photos } = profile
+
+  async validate(accessToken: any, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
+    // console.log('heeloo:::', done)
+    console.log("AccessToken", accessToken);
+    // console.log("Profile", profile);
+    // const queryParams = url.parse(accessToken.url, true).query;
+    // console.log("QueryParams", queryParams)
+    // console.log("RefreshToken:::", refreshToken);
+    const { name, emails, picture } = profile
     const user = {
-      email: emails[0].value,
+      // email: emails[0].value,
       firstName: name.givenName,
       lastName: name.familyName,
-      accessToken
+      accessToken,
+      refreshToken
     }
-    done(null, user);
+    return user;
   }
 }

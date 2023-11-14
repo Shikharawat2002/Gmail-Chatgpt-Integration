@@ -11,15 +11,4 @@ export class AppController {
   greatUser(): string {
     return this.appService.greetUser();
   }
-
-  // @Post()
-  // addUser(){
-  //   return this.appService.addUser();
-  // }
-
-  // @Get(':userid')
-  // findId(@Param('userid') userid: string): string {
-  //   return this.appService.findId(userid);
-  // }
 }
-
