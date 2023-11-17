@@ -1,53 +1,41 @@
 
 import { Body, Controller, Get, Param, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GmailService } from './gmail.service';
-import { GoogleStrategy } from './google.strategy';
+// import { GmailService } from './gmail.service';
+// import { GoogleStrategy } from './google.strategy';
 import { GmailInboxService } from './gmailInbox.service';
 import { GmailSendService } from './gmailSend.service';
 import { AxiosResponse } from 'axios';
 
 @Controller('google')
 export class GmailController {
-  constructor(private readonly gmailService: GmailService,
+  constructor(
     private readonly gmailInboxService: GmailInboxService,
     private readonly gmailSendService: GmailSendService,
-    private readonly googleStrategy: GoogleStrategy) { }
+  ) { }
 
   @Get()
   @UseGuards(AuthGuard('google'))
   async googleAuth(@Req() req, @Res() res) {
-
-    console.log('response::::', res)
+    // console.log('response::::')
   }
-
-
-  // @Get('auth/google/callback')
-  // @UseGuards(AuthGuard('google'))
-  // googleLoginCallback(@Req() req: Request, @Res() res: Response) {
-  //   console.log("res::::", res)
-  // }
-
-  // @Get('auth/google/callback')
-  // @UseGuards(AuthGuard('google'))
-  // googleAuthRedirect(@Req() req) {
-  //   console.log('res:::')
-  //   return this.gmailService.googleLogin(req);
-
-  // }
+  
 
   @Get('redirect')
   @UseGuards(AuthGuard('google'))
   googleAuthRedirect(@Req() req) {
-    return this.gmailService.googleLogin(req)
+    return this.gmailInboxService.googleLogin(req);
   }
 
-  // @Get('mail')
-  // getmailList(@Query('inboxid') inboxId: string,
-  //   @Query('accessToken') accessToken: string,) {
-  //   return this.gmailInboxService.getMailList(inboxId, accessToken)
-  // }
-
+  @Get('mail')
+  getmailList(@Query('inboxid') inboxId: string,
+    @Query('accessToken') accessToken: string,) {
+    return this.gmailInboxService.getMailList(inboxId, accessToken)
+  }
+  @Get('/test')
+  getTest() {
+    return this.gmailInboxService.getTest();
+  }
   @Get('gmail/inbox/')
   getInbox(@Query('inboxid') inboxId: string,
     @Query('accessToken') accessToken: string,) {
