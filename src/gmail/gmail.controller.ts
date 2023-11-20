@@ -1,5 +1,5 @@
 
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Render, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GmailService } from './gmail.service';
 import { GoogleStrategy } from './google.strategy';
@@ -11,7 +11,7 @@ import { AxiosResponse } from 'axios';
 export class GmailController {
   constructor(private readonly gmailService: GmailService,
     private readonly gmailInboxService: GmailInboxService,
-    private readonly gmailSendService:GmailSendService,
+    private readonly gmailSendService: GmailSendService,
     private readonly googleStrategy: GoogleStrategy) { }
 
   @Get()
@@ -24,15 +24,20 @@ export class GmailController {
   googleAuthRedirect(@Req() req) {
     return this.gmailService.googleLogin(req)
   }
- 
+
+  @Get('test')
+  @Render('index')
+  root() {
+    return { message: 'Hello world!' };
+  }
   @Get('gmail/inbox/')
-  getInbox()
-  {
+  getInbox() {
     return this.gmailInboxService.getInbox();
   }
+
+
   @Get('gmail/Inbox/readmessage/:messageId')
-  getReadMessage(@Param('messageId') messageId: string)
-  {
+  getReadMessage(@Param('messageId') messageId: string) {
     return this.gmailInboxService.getReadMessage(messageId)
   }
 
@@ -41,11 +46,11 @@ export class GmailController {
     const response = await this.gmailSendService.generateEmailResponse(data.prompt);
     return { response };
   }
-  
+
   @Post('send-email')
-async sendEmail(@Body() emailContent: any): Promise<AxiosResponse<any>> {
-  return this.gmailSendService.sendMail(emailContent);
-}
+  async sendEmail(@Body() emailContent: any): Promise<AxiosResponse<any>> {
+    return this.gmailSendService.sendMail(emailContent);
+  }
 
 
   // @Post('send-email')
@@ -60,5 +65,9 @@ async sendEmail(@Body() emailContent: any): Promise<AxiosResponse<any>> {
   //   );
   //   return { response };
   // }
- 
+
+}
+
+function root() {
+  throw new Error('Function not implemented.');
 }

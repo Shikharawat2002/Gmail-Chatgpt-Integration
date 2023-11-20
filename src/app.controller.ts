@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Render, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -11,6 +11,7 @@ export class AppController {
   greatUser(): string {
     return this.appService.greetUser();
   }
+  
 
   // @Post()
   // addUser(){
