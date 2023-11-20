@@ -19,11 +19,12 @@ export class GmailController {
   async googleAuth(@Req() req, @Res() res) {
     // console.log('response::::')
   }
-  
+
 
   @Get('redirect')
   @UseGuards(AuthGuard('google'))
   googleAuthRedirect(@Req() req) {
+    
     return this.gmailInboxService.googleLogin(req);
   }
 

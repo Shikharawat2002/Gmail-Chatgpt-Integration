@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html>
+<!-- views/mail.hbs -->
+<h1>Mail View</h1>
+<button onclick="fetchMail()">Fetch Mail</button>
+<div id="mailResults"></div>
 
-<head>
-  <meta charset="utf-8" />
-  <title>App</title>
-</head>
-
-<body>
-  <h1>inbox</h1>
-  
-
-  {{ message }}
-</body>
-
-</html>
+<script>
+  async function fetchMail() {
+    const response = await fetch('/google/mail');
+    const data = await response.json();
+    document.getElementById('mailResults').innerText = JSON.stringify(data, null, 2);
+  }
+</script>
