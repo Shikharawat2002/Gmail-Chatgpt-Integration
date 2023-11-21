@@ -48,7 +48,7 @@ export class GmailController {
       });
     }
     );
-    // console.log(myMail)
+    console.log(myMail)
     return { message: myMail };
   }
 

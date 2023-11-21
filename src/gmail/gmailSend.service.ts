@@ -13,7 +13,7 @@ export class GmailSendService {
 
   constructor() {
     // Initialize the OpenAI API client with your API key
-    this.openai = new OpenAI({ apiKey: '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' });
+    this.openai = new OpenAI({ apiKey: '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' });
     this.oAuth2Client = new google.auth.OAuth2(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
