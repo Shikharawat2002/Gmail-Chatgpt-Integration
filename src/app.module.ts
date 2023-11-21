@@ -5,10 +5,10 @@ import { GmailModule } from './gmail/gmail.module';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [GmailModule,PassportModule],
+  imports: [GmailModule, PassportModule],
   controllers: [AppController],
   providers: [AppService],
 })
 
-export class AppModule {4
+export class AppModule {
 }

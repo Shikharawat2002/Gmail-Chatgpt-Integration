@@ -12,7 +12,6 @@ export class AppService {
 
   // addUser():{
   // }
-
   // findId( userid:string): string {
   //   console.log("Param.Id", userid)
   //   return `the id is ${userid}`

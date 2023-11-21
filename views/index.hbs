@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html>
-<!-- views/mail.hbs -->
-<h1>Mail View</h1>
-<button onclick="fetchMail()">Fetch Mail</button>
-<div id="mailResults"></div>
 
-<script>
-  async function fetchMail() {
-    const response = await fetch('/google/mail');
-    const data = await response.json();
-    document.getElementById('mailResults').innerText = JSON.stringify(data, null, 2);
-  }
-</script>
+<head>
+  <meta charset="utf-8" />
+  <title>App</title>
+</head>
+
+<body style="background-color: aqua;">
+
+  <div class="container">
+    <h3>All messages</h3>
+    <ul>
+      {{#each message}}
+      <li>
+        <p><b>Message</b>: {{message.snippet}}</p>
+        <p><b>Date</b>: {{message.headers}} </p>
+        <p><b>From</b>: {{message.from}}</p>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</body>
+
+</html>

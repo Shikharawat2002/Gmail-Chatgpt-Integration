@@ -1,10 +1,11 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { GoogleStrategy } from './google.strategy'
 import { GmailController } from './gmail.controller';
 // import { GmailService } from './gmail.service';
 import { GmailInboxService } from './gmailInbox.service';
 import { GmailSendService } from './gmailSend.service';
-import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { SimpleLoggerMiddleware } from 'src/middleware/simple-logger.middleware';
+import { simpleFunc } from 'src/middleware';
 
 
 @Module({
@@ -14,9 +15,11 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 })
 
 export class GmailModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware)
-      .forRoutes({ path: 'gmail', method: RequestMethod.ALL });
-  }
+
 }
+// export class GmailModule implements NestModule
+// {
+//   configure(consumer: MiddlewareConsumer) {
+//       consumer.apply(simpleFunc).forRoutes('google');
+//   }
+//  }
