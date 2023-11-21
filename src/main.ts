@@ -6,28 +6,22 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 dotenv.config();
 
+// function globalMiddleware1(req: Request, res: Response, next: NextFunction) {
+//     // console.log("Global Middleware1....");
+//     next();
+// }
 
-function globalMiddleware1(req: Request, res: Response, next: NextFunction) {
-    // console.log("Global Middleware1....");
-    next();
-}
-
-function globalMiddleware2(req: Request, res: Response, next: NextFunction) {
-    // console.log("Second middleware.....");
-    next();
-}
+// function globalMiddleware2(req: Request, res: Response, next: NextFunction) {
+//     // console.log("Second middleware.....");
+//     next();
+// }
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
-    app.enableCors({
-        origin: 'http://localhost:3001', // Replace with the URL of your Next.js app
-    });
-    app.use(globalMiddleware1);
-    app.use(globalMiddleware2);
-
-    app.useStaticAssets(join(__dirname, '..', 'public'));
+    // app.use(globalMiddleware1);
+    // app.use(globalMiddleware2);
+    // app.useStaticAssets(join(__dirname, '..', 'public'));
     app.setBaseViewsDir(join(__dirname, '..', 'views'));
     app.setViewEngine('hbs');
-
     await app.listen(3000);
 }
 bootstrap()
