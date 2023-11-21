@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>App</title>
+</head>
+
+<body style="background-color: aqua;">
+
+  <div class="container">
+    <h3>All messages</h3>
+    <ul>
+      {{#each message}}
+      <li>
+        <p><b>Message</b>: {{message.snippet}}</p>
+        <p><b>Date</b>: {{message.headers}} </p>
+        <p><b>From</b>: {{message.from}}</p>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</body>
+
+</html>
