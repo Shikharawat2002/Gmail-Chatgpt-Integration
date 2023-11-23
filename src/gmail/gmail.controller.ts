@@ -58,16 +58,28 @@ export class GmailController {
 
   @Get('/test')
   @Render('test.hbs')
-  async root(@Query('messageID') messageID?: string, @Query('email') email?: string, @Query('accessToken') accessToken?: string)  {
+  async root(@Query('messageID') messageID?: string, @Query('email') email?: string, @Query('accessToken') accessToken?: string) {
     const mailDetail = {
       messageID: messageID,
       email: email,
       accessToken: accessToken
     }
-    console.log("mailDetail", mailDetail)
+    // console.log("mailDetail", mailDetail)
     const myMessage = await this.gmailInboxService.getReadMessage(messageID, email, accessToken)
-    console.log("myMessage", myMessage);
+    // console.log("myMessage", myMessage);
+    // const { snippet } = myMessage;
+    // console.log(snippet)
+    // const myMailResponse = await this.gmailSendService.generateEmailResponse(prompt, snippet);
     return { message: myMessage };
+  }
+
+  @Post('generate-response')
+  // @Render('test.hbs')
+  async generateEmailResponse(@Body() data: { prompt: string, snippet: string }) {
+    const response = await this.gmailSendService.generateEmailResponse(data.prompt, data.snippet);
+
+    console.log('response:::', response)
+    return { messageResponse: response };
   }
 
 
@@ -125,12 +137,6 @@ export class GmailController {
     @Query('accessToken') accessToken: string,
   ) {
     return this.gmailInboxService.getReadMessage(messageId, inboxId, accessToken)
-  }
-
-  @Post('generate-response')
-  async generateEmailResponse(@Body() data: { prompt: string, input: string }) {
-    const response = await this.gmailSendService.generateEmailResponse(data.prompt, data.input);
-    return { response };
   }
 
   @Post('send-email')

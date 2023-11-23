@@ -13,7 +13,7 @@ export class GmailSendService {
 
   constructor() {
     // Initialize the OpenAI API client with your API key
-    this.openai = new OpenAI({ apiKey: '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' });
+    this.openai = new OpenAI({ apiKey: process.env.CHATGPT_API });
     this.oAuth2Client = new google.auth.OAuth2(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -55,9 +55,10 @@ export class GmailSendService {
     return this.openai.completions.create({
       prompt: prompt + input,
       max_tokens: 50,
-      model: 'text-davinci-002'
+      model: 'text-ada-001'
     })
       .then((response) => {
+        console.log("Response.choice", response.choices[0].text)
         return response.choices[0].text;
       })
       .catch((error) => {

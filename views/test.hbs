@@ -23,14 +23,52 @@
 </head>
 
 <body>
-    <h1>test</h1>
+    <h1>Message</h1>
     <div class="message">
         <div class="messageContainer">
-            <p><b>message</b>{{message.snippet}}</p>
-            <button><b>Generate Response</b></button>
+            <p>{{message.snippet}}</p>
+
+
+            <label for="promptInput">Enter Prompt:</label>
+            <input type="text" id="promptInput" placeholder="Enter your prompt">
+            <button onclick="handleResponse('{{message.snippet}}')"><b>Generate Response</b></button>
         </div>
+        <br>
+        <div id="apiResponse"></div>
     </div>
 
+    <script>
+        async function handleResponse(snippet) {
+            try {
+                const prompt = document.getElementById('promptInput').value;
+                if (!prompt) {
+                    alert('Please enter a prompt.');
+                    return;
+                }
+                const data = {
+                    prompt: prompt,
+                    snippet: snippet,
+                }
+                fetch('/google/generate-response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then(async function (res) {
+                        const response = await res.json();
+                        document.getElementById('apiResponse').innerText = response.messageResponse;
+                    })
+                    .catch(function (error) {
+                        console.log('error', error)
+                    })
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+    </script>
 </body>
 
 </html>
