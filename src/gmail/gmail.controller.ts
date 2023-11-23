@@ -4,6 +4,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { GmailInboxService } from './gmailInbox.service';
 import { GmailSendService } from './gmailSend.service';
 import { AxiosResponse } from 'axios';
+import { query } from 'express';
+import { simpleFunc } from 'src/middleware';
 
 @Controller('google')
 export class GmailController {
@@ -40,6 +42,9 @@ export class GmailController {
       myMail.push({
         partialName: 'index.hbs',
         message: {
+          accessToken: req?.user?.accessToken,
+          email: req?.user?.email,
+          messageID: element?.id,
           snippet: element?.snippet,
           headers: dateHeader ? dateHeader.value : null,
           from: sender ? sender.value : null,
@@ -51,6 +56,20 @@ export class GmailController {
     return { message: myMail };
   }
 
+  @Get('/test')
+  @Render('test.hbs')
+  async root(@Query('messageID') messageID?: string, @Query('email') email?: string, @Query('accessToken') accessToken?: string)  {
+    const mailDetail = {
+      messageID: messageID,
+      email: email,
+      accessToken: accessToken
+    }
+    console.log("mailDetail", mailDetail)
+    const myMessage = await this.gmailInboxService.getReadMessage(messageID, email, accessToken)
+    console.log("myMessage", myMessage);
+    return { message: myMessage };
+  }
+
 
   @Get('mail')
   // @Render('index.hbs')/
@@ -60,13 +79,6 @@ export class GmailController {
   }
 
 
-
-
-  @Get('/test')
-  @Render('index.hbs')
-  root() {
-    return { message: 'hello' };
-  }
   // @Get('/test')
   // getTest() {
   //   return this.gmailInboxService.getTest();

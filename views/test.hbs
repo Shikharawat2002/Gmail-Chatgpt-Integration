@@ -4,11 +4,33 @@
 <head>
     <meta charset="utf-8" />
     <title>App</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        .messageContainer {
+            height: max-content;
+        }
+
+        button {
+            background-color: rgb(100, 100, 255);
+            color: white;
+            margin: 2px;
+            padding: 8px;
+        }
+    </style>
 </head>
 
 <body>
     <h1>test</h1>
-    {{ message }}
+    <div class="message">
+        <div class="messageContainer">
+            <p><b>message</b>{{message.snippet}}</p>
+            <button><b>Generate Response</b></button>
+        </div>
+    </div>
+
 </body>
 
 </html>

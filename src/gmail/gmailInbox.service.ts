@@ -31,7 +31,7 @@ export class GmailInboxService {
         }
     }
 
-    async getInbox(id: string, accessToken: string): Promise<any>   {
+    async getInbox(id: string, accessToken: string): Promise<any> {
         try {
             const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages?q=label:inbox`;
             const config = this.generateConfig(url, accessToken);
@@ -45,7 +45,7 @@ export class GmailInboxService {
         }
     }
 
-    async getMailList(inboxid: string, accessToken: string): Promise<any>   {
+    async getMailList(inboxid: string, accessToken: string): Promise<any> {
         try {
             const mails = await this.getInbox(inboxid, accessToken);
             console.log("mails::", mails)
@@ -117,7 +117,7 @@ export class GmailInboxService {
     //     }
     // }
 
-    async getInboxUnread(id: string, accessToken: string): Promise<string[]>  {
+    async getInboxUnread(id: string, accessToken: string): Promise<string[]> {
         try {
             const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages?q=label:inbox+is:unread`;
             const config = this.generateConfig(url, accessToken);
@@ -169,14 +169,13 @@ export class GmailInboxService {
 
 
 
-    async getReadMessage(messageId: string, id: string, accessToken: string): Promise<any>  
-    {
+    async getReadMessage(messageId: string, id: string, accessToken: string): Promise<any> {
         try {
             const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages/${messageId}`;
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             // console.log('res', response)
-            return response.data;
+            return response?.data;
             // return response.data.drafts;
         } catch (error) {
             console.log(error);

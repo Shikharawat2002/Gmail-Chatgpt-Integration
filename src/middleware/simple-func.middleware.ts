@@ -1,7 +1,11 @@
-import { Request, Response, NextFunction } from 'express'
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
 
-export function simpleFunc(req: Request, res: Response, next: NextFunction) {
-  // In here do some stuff :p
-  console.log('Executing request after the function middleware...');
-  next;
-} 
+@Injectable()
+export class simpleFunc implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction) {
+    const user = req;
+    // console.log('Request...', user.body);
+    next;
+  }
+}

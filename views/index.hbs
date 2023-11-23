@@ -4,22 +4,38 @@
 <head>
   <meta charset="utf-8" />
   <title>App</title>
+  <style>
+    .mails {
+      background-color: rgb(242, 235, 219);
+      padding: 2px;
+      margin: 8px;
+    }
+  </style>
 </head>
 
-<body style="background-color: aqua;">
+<body>
 
   <div class="container">
-    <h3>All messages</h3>
     <ul>
       {{#each message}}
-      <li>
+      <div class="mails" onclick="handleclick('{{message.messageID}}', '{{message.email}}',' {{message.accessToken}}')">
+        <p><b>MessageID</b>{{message.messageID}}</p>
+        <p><b>email</b>:{{message.email}}</p>
+        <p><b>accessToken</b>: {{message.accessToken}}</p>
         <p><b>Message</b>: {{message.snippet}}</p>
         <p><b>Date</b>: {{message.headers}} </p>
         <p><b>From</b>: {{message.from}}</p>
-      </li>
+      </div>
       {{/each}}
     </ul>
   </div>
+
+  <script>
+    function handleclick(messageID, email, accessToken) {
+      console.log("clicked");
+      window.location.href = `/google/test?messageID=${messageID}&email=${email}&accessToken=${accessToken}`;
+    }
+  </script>
 </body>
 
 </html>
