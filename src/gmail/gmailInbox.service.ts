@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 @Injectable()
 export class GmailInboxService {
@@ -42,6 +42,24 @@ export class GmailInboxService {
         } catch (error) {
             // console.log(error);
             return error;
+        }
+    }
+
+    async getMailByThreadId(userId: string, accessToken: string) {
+        try {
+            //   const url = `https://gmail.googleapis.com/gmail/v1/users/${userId}/threads/${threadId}`;
+            const url = `https://gmail.googleapis.com/gmail/v1/users/${userId}/threads`;
+
+            const config = this.generateConfig(url, accessToken);
+            const response = await axios(config);
+            console.log("thread Response", response);
+            // console.log("getMailbyThread Response", response)
+            // let messages = response.data.messages;
+            // // console.log(response.data.messages);
+            return response.data.threads;
+        }
+        catch (err) {
+            console.log(err);
         }
     }
 
@@ -171,10 +189,9 @@ export class GmailInboxService {
 
     async getReadMessage(messageId: string, id: string, accessToken: string): Promise<any> {
         try {
-            const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages/${messageId}`;
+            const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages/${messageId}?format=full`;
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
-            // console.log('res', response)
             return response?.data;
             // return response.data.drafts;
         } catch (error) {
@@ -183,5 +200,38 @@ export class GmailInboxService {
         }
     }
 
+    async getThreadMessage(id: string, accessToken: string): Promise<any> {
+        try {
+            const url = `https://gmail.googleapis.com/gmail/v1/users/rawatsikha112@gmail.com/threads/${id} `;
+            const config = this.generateConfig(url, accessToken);
+            const response = await axios(config);
+            const data = response.data;
+            const message = data?.messages[0]?.payload?.parts[0]?.body?.data;
+            // const result = data?.messages.map((index) => {
+            //     const payloads = index?.payload?.parts.map((index) => {
+            //         const data = index?.body?.data;
+            //         console.log("DATA:::::", data)
+            //         const decodedResponse = Buffer.from(data, 'base64').toString('utf-8');
+            //         return decodedResponse;
+            //     })
+            //     return payloads;
+            //     // console.log("Payloads:::", payloads);
+            // })
+
+            const result = data?.messages.map((index) => {
+                const payloads = index?.payload?.parts[0]?.body?.data
+                console.log("payloads::::::::", payloads);
+                const decodedResponse = Buffer.from(payloads, 'base64').toString('utf-8');
+                return decodedResponse;
+            })
+            
+            console.log("RESULT::::", result)
+            return result;
+            // return response.data.drafts;
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
 
 }

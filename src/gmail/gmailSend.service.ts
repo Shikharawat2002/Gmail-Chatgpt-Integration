@@ -58,7 +58,7 @@ export class GmailSendService {
       model: 'text-ada-001'
     })
       .then((response) => {
-        console.log("Response.choice", response.choices[0].text)
+        // console.log("Response.choice", response.choices[0].text)
         return response.choices[0].text;
       })
       .catch((error) => {

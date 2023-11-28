@@ -44,18 +44,19 @@
                     <b>Date: </b> {{message.date}}
                 </p>
             </div>
-            <p><b>To me:</b>{{message.message}}</p>
-            <label for="promptInput"> <b>Enter Prompt:</b></label>
+            <p><b>To me: </b>{{message.message}}</p>
+            <label for="promptInput"> <b> Enter Prompt:</b></label>
             <input type="text" id="promptInput" value="You are Email Automation Specialist  ">
             <button onclick="handleGenerateResponse('{{message.message}}', '{{message.from}}')"><b>Generate
                     Response</b></button>
         </div>
         <br>
+        <h1>Response</h1>
         <p id="apiResponse"></p>
     </div>
 
     <script>
-        
+
         async function handleGenerateResponse(snippet, from) {
             console.log("handleGenerateResponse")
             try {

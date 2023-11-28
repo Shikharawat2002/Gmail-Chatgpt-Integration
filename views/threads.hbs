@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>App</title>
+  <style>
+    body {
+      margin: 50px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .mails {
+      background-color: rgb(242, 235, 219);
+      padding: 20px;
+      margin: 4px;
+    }
+
+    .mail-item {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <ol >
+      {{#each message}}
+      <li onclick="handleClick('{{id}}', '{{message.accessToken}}')">
+        <p>{{id}}</p>
+        <p class="mails">{{snippet}}</p>
+      </li>
+      {{/each}}
+    </ol>
+  </div>
+  <script>
+    function handleClick(id, accessToken) {
+      console.log("id", id);
+      console.log("accessToken", accessToken)
+    }
+  </script>
+</body>
+
+</html>
