@@ -37,7 +37,7 @@ export class GmailInboxService {
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             let messages = response.data.messages;
-            console.log(response.data.messages);
+            // console.log(response.data.messages);
             return response.data.messages;
         } catch (error) {
             // console.log(error);
@@ -48,7 +48,7 @@ export class GmailInboxService {
     async getMailList(inboxid: string, accessToken: string): Promise<any> {
         try {
             const mails = await this.getInbox(inboxid, accessToken);
-            console.log("mails::", mails)
+            // console.log("mails::", mails)
 
             if (mails !== null) {
                 const messageID = (mails as { id?: string }[]).map((item) => item?.id);

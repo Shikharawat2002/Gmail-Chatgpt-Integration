@@ -5,10 +5,23 @@
   <meta charset="utf-8" />
   <title>App</title>
   <style>
+    body {
+      margin: 50px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
     .mails {
       background-color: rgb(242, 235, 219);
-      padding: 2px;
-      margin: 8px;
+      padding: 20px;
+      margin: 4px;
+    }
+
+    .mail-item {
+      display: flex;
+      justify-content: space-between;
     }
   </style>
 </head>
@@ -16,18 +29,24 @@
 <body>
 
   <div class="container">
-    <ul>
+    <h1>Inbox</h1>
+    <ol>
       {{#each message}}
-      <div class="mails" onclick="handleclick('{{message.messageID}}', '{{message.email}}',' {{message.accessToken}}')">
-        {{!-- <p><b>MessageID</b>{{message.messageID}}</p>
-        <p><b>email</b>:{{message.email}}</p>
-        <p><b>accessToken</b>: {{message.accessToken}}</p> --}}
-        <p><b>Message</b>: {{message.snippet}}</p>
-        <p><b>Date</b>: {{message.headers}} </p>
-        <p><b>From</b>: {{message.from}}</p>
-      </div>
+      <li>
+        <div class="mails"
+          onclick="handleclick('{{message.messageID}}', '{{message.email}}',' {{message.accessToken}}')">
+          {{!-- <p><b>MessageID</b>{{message.messageID}}</p>
+          <p><b>email</b>:{{message.email}}</p>
+          <p><b>accessToken</b>: {{message.accessToken}}</p> --}}
+          <div class="mail-item">
+            <p><b>Message</b>: {{message.snippet}}</p>
+            <p><b>Date</b>: {{message.date}} </p>
+          </div>
+          {{!-- <p><b>From</b>: {{message.from}}</p> --}}
+        </div>
+      </li>
       {{/each}}
-    </ul>
+    </ol>
   </div>
 
   <script>

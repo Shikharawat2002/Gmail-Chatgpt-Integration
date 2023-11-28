@@ -28,10 +28,10 @@ export class GmailSendService {
       const transport = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "shikha.rawat@ailoitte.com", // Replace with your Gmail email
+          user: emailContent.mailId, // Replace with your Gmail email
           // You don't need to provide a password if you're using OAuth2
           type: "OAuth2",
-          accessToken: process.env.ACCESS_TOKEN,
+          accessToken: emailContent.accessToken,
           // More auth options if needed
         },
       });
@@ -39,8 +39,8 @@ export class GmailSendService {
       const mailOptions = {
         from: "shikha.rawat@ailoitte.comm", // Replace with your Gmail email
         to: emailContent.to,
-        subject: emailContent.subject,
-        text: emailContent.text,
+        subject: "test via nest",
+        text: emailContent.response,
       };
 
       const result = await transport.sendMail(mailOptions);
@@ -54,7 +54,7 @@ export class GmailSendService {
   generateEmailResponse(prompt: string, input: string): Promise<string> {
     return this.openai.completions.create({
       prompt: prompt + input,
-      max_tokens: 50,
+      max_tokens: 500,
       model: 'text-ada-001'
     })
       .then((response) => {

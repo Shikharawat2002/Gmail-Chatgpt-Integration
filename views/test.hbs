@@ -6,11 +6,21 @@
     <title>App</title>
     <style>
         body {
-            text-align: center;
+            margin: 50px;
         }
 
         .messageContainer {
             height: max-content;
+        }
+
+        .sender-info {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        input {
+            height: 20px;
+            width: 500px;
         }
 
         button {
@@ -26,19 +36,28 @@
     <h1>Message</h1>
     <div class="message">
         <div class="messageContainer">
-            <p>{{message.snippet}}</p>
-
-
-            <label for="promptInput">Enter Prompt:</label>
-            <input type="text" id="promptInput" placeholder="Enter your prompt">
-            <button onclick="handleResponse('{{message.snippet}}')"><b>Generate Response</b></button>
+            <div class="sender-info">
+                <p>
+                    <b> From: </b>{{message.from}}
+                </p>
+                <p>
+                    <b>Date: </b> {{message.date}}
+                </p>
+            </div>
+            <p><b>To me:</b>{{message.message}}</p>
+            <label for="promptInput"> <b>Enter Prompt:</b></label>
+            <input type="text" id="promptInput" value="You are Email Automation Specialist  ">
+            <button onclick="handleGenerateResponse('{{message.message}}', '{{message.from}}')"><b>Generate
+                    Response</b></button>
         </div>
         <br>
-        <div id="apiResponse"></div>
+        <p id="apiResponse"></p>
     </div>
 
     <script>
-        async function handleResponse(snippet) {
+        
+        async function handleGenerateResponse(snippet, from) {
+            console.log("handleGenerateResponse")
             try {
                 const prompt = document.getElementById('promptInput').value;
                 if (!prompt) {
@@ -59,6 +78,8 @@
                     .then(async function (res) {
                         const response = await res.json();
                         document.getElementById('apiResponse').innerText = response.messageResponse;
+                        getSenderMail(snippet, from);
+
                     })
                     .catch(function (error) {
                         console.log('error', error)
@@ -67,6 +88,50 @@
                 console.error('Error:', error);
             }
         }
+
+        function getSenderMail(snippet, from) {
+            console.log("inputMail")
+            let input = document.createElement('input');
+            const emailRegex = /<([^>]+)>/;
+            const match = from.match(emailRegex);
+            // Check if a match is found
+            if (match) {
+                const extractedEmail = match[1];
+                input.value = extractedEmail;
+                document.body.appendChild(input);
+                console.log(extractedEmail); // Output: campusjoining@techmahindra.com
+            } else {
+                input.value = from;
+                document.body.appendChild(input);
+                console.log("input", input)
+            }
+            createSendButton(snippet, from)
+        }
+
+        function createSendButton(snippet, from) {
+            console.log("createButton")
+            let button = document.createElement('button')
+            button.textContent = 'send';
+            document.body.appendChild(button);
+            button.addEventListener('click', function () { handleSendResponse(snippet, from) })
+        }
+        function handleSendResponse(snippet, from) {
+            console.log("handleSendResponse")
+            console.log(snippet);
+            console.log(from)
+            const emailContent = {
+                mailId: 'jn'
+            }
+            fetch('/google/send-email?messageID=${messageID}&email=${email}&accessToken=${accessToken}', {
+                method: "Post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(emailContent)
+            })
+        }
+
+
 
     </script>
 </body>

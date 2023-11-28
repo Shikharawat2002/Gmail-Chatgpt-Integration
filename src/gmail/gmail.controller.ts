@@ -46,13 +46,13 @@ export class GmailController {
           email: req?.user?.email,
           messageID: element?.id,
           snippet: element?.snippet,
-          headers: dateHeader ? dateHeader.value : null,
+          date: dateHeader ? dateHeader.value : null,
           from: sender ? sender.value : null,
         },
       });
     }
     );
-    console.log(myMail)
+    // console.log(myMail)
     return { message: myMail };
   }
 
@@ -66,11 +66,17 @@ export class GmailController {
     }
     // console.log("mailDetail", mailDetail)
     const myMessage = await this.gmailInboxService.getReadMessage(messageID, email, accessToken)
-    // console.log("myMessage", myMessage);
-    // const { snippet } = myMessage;
-    // console.log(snippet)
-    // const myMailResponse = await this.gmailSendService.generateEmailResponse(prompt, snippet);
-    return { message: myMessage };
+    console.log("mymessage", myMessage);
+    const message = myMessage?.snippet;
+    const date = myMessage?.payload?.headers?.find((date) => date.name === 'Date');
+    const from = myMessage?.payload?.headers?.find((sender) => sender.name === 'From');
+    const response = {
+      message: message,
+      from: from.value,
+      date: date.value
+    }
+    console.log("mymessage:::", response);
+    return { message: response };
   }
 
   @Post('generate-response')
@@ -78,7 +84,7 @@ export class GmailController {
   async generateEmailResponse(@Body() data: { prompt: string, snippet: string }) {
     const response = await this.gmailSendService.generateEmailResponse(data.prompt, data.snippet);
 
-    console.log('response:::', response)
+    // console.log('response:::', response)
     return { messageResponse: response };
   }
 
@@ -130,12 +136,12 @@ export class GmailController {
     return this.gmailInboxService.getDraftMessage(inboxId, accessToken);
   }
 
-
-  @Get('gmail/inbox/readmessage')
+  @Get('readmessage')
   getReadMessage(@Query('messageId') messageId: string,
     @Query('inboxid') inboxId: string,
     @Query('accessToken') accessToken: string,
   ) {
+
     return this.gmailInboxService.getReadMessage(messageId, inboxId, accessToken)
   }
 
