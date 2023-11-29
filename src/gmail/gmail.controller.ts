@@ -4,8 +4,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { GmailInboxService } from './gmailInbox.service';
 import { GmailSendService } from './gmailSend.service';
 import { AxiosResponse } from 'axios';
-import { query } from 'express';
-import { simpleFunc } from 'src/middleware';
 
 @Controller('google')
 export class GmailController {
@@ -39,28 +37,43 @@ export class GmailController {
         accessToken: user.accessToken
       })
     })
-    console.log("userDetails", userDetails)
+    // console.log("userDetails", userDetails)
     return { message: userDetails }
   }
 
 
   @Get('threaddetails')
   @Render('chat.hbs')
-  async getThreadMessage(@Query('id') id: string,
-    @Query('accessToken') accessToken: string) {
-    const result = await this.gmailInboxService.getThreadMessage(id, accessToken);
-    console.log("REsult::", result);
+  async getThreadMessage(
+    @Query('id') id: string,
+    @Query('accessToken') accessToken: string,
+  ) {
+    try {
+      const result = await this.gmailInboxService.getThreadMessage(id, accessToken);
 
-    let userDetails = [];
-    result.forEach(element => {
-      // console.log("element:;", element)
-      userDetails.push({
-        threadMessage: element
-      })
-    })
-    console.log("userDetails", userDetails)
-    return { message: userDetails }
+      if (result && Array.isArray(result)) {
+        const userDetails = result.map((element) => ({
+          threadMessage: element,
+        }));
+        // console.log('userDetails', userDetails);
+        return { message: userDetails };
+      }
+      return { message: [{ threadMessage: 'No messages to show' }] };
+    } catch (error) {
+      console.error(error);
+      return { message: 'Error fetching messages' };
+    }
   }
+
+  @Post('generate-response')
+  // @Render('test.hbs')
+  async generateEmailResponse(@Body() data: { prompt: string, snippet: string }) {
+    const response = await this.gmailSendService.generateEmailResponse(data.prompt, data.snippet);
+    // console.log('response:::', response)
+    return { messageResponse: response };
+  }
+
+
 
   @Get('/test')
   @Render('test.hbs')
@@ -70,7 +83,6 @@ export class GmailController {
       email: email,
       accessToken: accessToken
     }
-
     // console.log("mailDetail", mailDetail)
     console.log("accessToken", accessToken)
     const myMessage = await this.gmailInboxService.getReadMessage(messageID, email, accessToken)
@@ -87,14 +99,6 @@ export class GmailController {
     return { message: response };
   }
 
-
-  @Post('generate-response')
-  // @Render('test.hbs')
-  async generateEmailResponse(@Body() data: { prompt: string, snippet: string }) {
-    const response = await this.gmailSendService.generateEmailResponse(data.prompt, data.snippet);
-    // console.log('response:::', response)
-    return { messageResponse: response };
-  }
 
 
   @Get('mail')
@@ -156,8 +160,17 @@ export class GmailController {
 
 
   @Post('send-email')
-  async sendEmail(@Body() emailContent: any): Promise<AxiosResponse<any>> {
+  async sendEmail(@Req() req,
+    @Body() emailContent: any): Promise<AxiosResponse<any>> {
+    const refererHeader = req.headers['referer'];
+    if (refererHeader) {
+      // Extracting values from the Referer header
+      const refererUrl = new URL(refererHeader);
+      const httpContentId = refererUrl.searchParams.get('id');
+      const accessToken = refererUrl.searchParams.get('accessToken');
+      console.log(httpContentId)
+      console.log(accessToken)
+    }
     return this.gmailSendService.sendMail(emailContent);
   }
-
 }

@@ -52,10 +52,6 @@ export class GmailInboxService {
 
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
-            console.log("thread Response", response);
-            // console.log("getMailbyThread Response", response)
-            // let messages = response.data.messages;
-            // // console.log(response.data.messages);
             return response.data.threads;
         }
         catch (err) {
@@ -206,12 +202,17 @@ export class GmailInboxService {
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             const data = response.data;
-            const result = data?.messages.map((index) => {
+            const temp = response.data?.messages[0].payload.parts
+            console.log("temp", temp)
+            const result = data?.messages?.map((index) => {
                 const payloads = index?.payload?.parts[0]?.body?.data
-                const decodedResponse = Buffer.from(payloads, 'base64').toString('utf-8');
-                return decodedResponse;
-            })
 
+                if (payloads) {
+                    const decodedResponse = Buffer.from(payloads, 'base64').toString('utf-8');
+                    return decodedResponse;
+                }
+                return null;
+            })
             // console.log("RESULT::::", result)
             return result;
         } catch (error) {

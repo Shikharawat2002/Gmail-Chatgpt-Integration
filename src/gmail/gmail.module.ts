@@ -17,6 +17,6 @@ import { simpleFunc } from 'src/middleware';
 // }
 export class GmailModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(simpleFunc).forRoutes('google/mail');
+    consumer.apply(simpleFunc).forRoutes('google/threaddetails');
   }
 }

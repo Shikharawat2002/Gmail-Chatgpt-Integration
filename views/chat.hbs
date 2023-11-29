@@ -26,6 +26,10 @@
             font-size: larger;
             color: white;
         }
+
+        #promptInput {
+            width: 600px;
+        }
     </style>
 </head>
 
@@ -35,16 +39,98 @@
         <ol>
             {{#each message}}
             <li>
-                <p class=".mail-item">s {{threadMessage}}</p>
+                <p class="mail-item">{{threadMessage}}</p>
                 <br>
             </li>
             {{/each}}
         </ol>
-        <button>Response</button>
+        <input type="text" id="promptInput"
+            value=" You are Email Automation Specialist  generate a reply for this mail">
+        <button onclick="handleResponse()">Response</button>
+        <div id="new"></div>
+
     </div>
 
     <script>
-       
+        function handleResponse() {
+            var messages = document.querySelectorAll('.mail-item');
+            console.log("Message", messages);
+
+            if (messages.length > 0) {
+                var concatenatedMessage = Array.from(messages).map(function (message) {
+                    return message.textContent.trim();
+                })
+                handleGenerateResponse(concatenatedMessage)
+
+                console.log("Concatenated Message:", concatenatedMessage);
+            } else {
+                console.error("No elements with the class 'mail-item' found");
+            }
+
+        }
+
+        async function handleGenerateResponse(concatenatedMessage) {
+            console.log("handleGenerateResponse")
+            try {
+                const prompt = document.getElementById('promptInput').value;
+                if (!prompt) {
+                    alert('Please enter a prompt.');
+                    return;
+                }
+                const data = {
+                    prompt: prompt,
+                    concatenatedMessage: concatenatedMessage,
+                }
+                console.log("PROMPT::", prompt)
+                console.log("concatenatedMessage", concatenatedMessage)
+                fetch('/google/generate-response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then(async function (res) {
+                        const response = await res.json();
+                        var tag = document.createElement("p");
+                        var textNode = document.createTextNode(response.messageResponse); // Create a text node
+                        tag.appendChild(textNode); // Append the text node to the paragraph element
+                        var element = document.getElementById("new");
+                        element.appendChild(tag);
+
+
+                    })
+                    .catch(function (error) {
+                        console.log('error', error)
+                    })
+            } catch (error) {
+                console.error('Error:', error);
+            }
+            createSendButton(concatenatedMessage, 'rawatsikha111@gmail.com')
+        }
+
+        function createSendButton(concatenatedMessage) {
+            console.log("createButton")
+            let button = document.createElement('button')
+            button.textContent = 'send';
+            document.body.appendChild(button);
+            button.addEventListener('click', function () { handleSendResponse(concatenatedMessage) })
+        }
+        function handleSendResponse(concatenatedMessage) {
+            console.log("handleSendResponse")
+            console.log("concatenatedMessage", concatenatedMessage);
+            const emailContent = {
+                responseText: concatenatedMessage,
+            }
+            fetch('/google/send-email?messageID=${messageID}&email=${email}&accessToken=${accessToken}', {
+                method: "Post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(emailContent)
+            })
+        }
+
     </script>
 </body>
 

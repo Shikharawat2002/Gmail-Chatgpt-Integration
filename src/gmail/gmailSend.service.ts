@@ -11,7 +11,6 @@ export class GmailSendService {
   private openai;
   private oAuth2Client;
 
-  s
   constructor() {
     // Initialize the OpenAI API client with your API key
     this.openai = new OpenAI({ apiKey: process.env.CHATGPT_API });
@@ -52,11 +51,12 @@ export class GmailSendService {
     }
   }
 
+
   generateEmailResponse(prompt: string, input: string): Promise<string> {
     return this.openai.completions.create({
       prompt: prompt + input,
-      max_tokens: 500,
-      model: 'text-ada-001'
+      max_tokens: 600,
+      model: 'text-davinci-002'
     })
       .then((response) => {
         // console.log("Response.choice", response.choices[0].text)
