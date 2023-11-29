@@ -2,7 +2,6 @@ import { Injectable, Param } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-
   greetUser(): string {
     return 'Hello user';
   }

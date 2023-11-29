@@ -17,46 +17,8 @@ export class GmailController {
   @Get()
   @UseGuards(AuthGuard('google'))
   async googleAuth(@Req() req, @Res() res) {
-    // console.log('response::::')
   }
-  // @Get('redirect')
 
-
-
-
-  // @Get('redirect')
-  // @Render('index.hbs')
-  // @UseGuards(AuthGuard('google'))
-  // async googleAuthRedirect(@Req() req) {
-  //   //user Info
-  //   const user = {
-  //     accessToken: req?.user?.accessToken,
-  //     email: req?.user?.email
-  //   }
-  //   req.userdetails = user;
-
-  //   // fetch all mails 
-  //   const mails = await this.gmailInboxService.getMailList(user.email, user.accessToken);
-  //   const myMail = [];
-  //   mails.forEach((element) => {
-  //     const dateHeader = element?.payload?.headers?.find((header) => header.name === 'Date');
-  //     const sender = element?.payload?.headers?.find((header) => header.name === "From")
-  //     myMail.push({
-  //       partialName: 'index.hbs',
-  //       message: {
-  //         accessToken: req?.user?.accessToken,
-  //         email: req?.user?.email,
-  //         messageID: element?.id,
-  //         snippet: element?.snippet,
-  //         date: dateHeader ? dateHeader.value : null,
-  //         from: sender ? sender.value : null,
-  //       },
-  //     });
-  //   }
-  //   );
-  //   // console.log(myMail)
-  //   return { message: myMail };
-  // }
 
   @Get('redirect')
   @Render('threads.hbs')
@@ -67,15 +29,37 @@ export class GmailController {
       accessToken: req?.user?.accessToken,
       email: req?.user?.email
     }
-
     const myMail = await this.gmailInboxService.getMailByThreadId(user.email, user.accessToken);
-    const userDetails = {
-      myMail: myMail,
-      accessToken: user.accessToken
-    }
+    let userDetails = [];
+    myMail.forEach(element => {
+      // console.log("element:;", element)
+      userDetails.push({
+        id: element.id,
+        snippet: element.snippet,
+        accessToken: user.accessToken
+      })
+    })
+    console.log("userDetails", userDetails)
+    return { message: userDetails }
+  }
 
-    console.log("MyMAils", userDetails);
-    return { message: myMail }
+
+  @Get('threaddetails')
+  @Render('chat.hbs')
+  async getThreadMessage(@Query('id') id: string,
+    @Query('accessToken') accessToken: string) {
+    const result = await this.gmailInboxService.getThreadMessage(id, accessToken);
+    console.log("REsult::", result);
+
+    let userDetails = [];
+    result.forEach(element => {
+      // console.log("element:;", element)
+      userDetails.push({
+        threadMessage: element
+      })
+    })
+    console.log("userDetails", userDetails)
+    return { message: userDetails }
   }
 
   @Get('/test')
@@ -86,6 +70,7 @@ export class GmailController {
       email: email,
       accessToken: accessToken
     }
+
     // console.log("mailDetail", mailDetail)
     console.log("accessToken", accessToken)
     const myMessage = await this.gmailInboxService.getReadMessage(messageID, email, accessToken)
@@ -107,7 +92,6 @@ export class GmailController {
   // @Render('test.hbs')
   async generateEmailResponse(@Body() data: { prompt: string, snippet: string }) {
     const response = await this.gmailSendService.generateEmailResponse(data.prompt, data.snippet);
-
     // console.log('response:::', response)
     return { messageResponse: response };
   }
@@ -169,12 +153,6 @@ export class GmailController {
     return this.gmailInboxService.getReadMessage(messageId, inboxId, accessToken)
   }
 
-  @Get('threaddetails')
-  @Render('chat.hbs')
-  getThreadMessage(@Query('id') id: string,
-    @Query('accessToken') accessToken: string) {
-    return this.gmailInboxService.getThreadMessage(id, accessToken);
-  }
 
 
   @Post('send-email')

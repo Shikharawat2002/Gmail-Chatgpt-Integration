@@ -7,5 +7,6 @@ export class simpleFunc implements NestMiddleware {
     const user = req;
     // console.log('Request...', user.body);
     next;
+    
   }
 }

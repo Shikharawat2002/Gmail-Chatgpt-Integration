@@ -11,6 +11,7 @@ export class GmailSendService {
   private openai;
   private oAuth2Client;
 
+  s
   constructor() {
     // Initialize the OpenAI API client with your API key
     this.openai = new OpenAI({ apiKey: process.env.CHATGPT_API });

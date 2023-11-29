@@ -206,28 +206,14 @@ export class GmailInboxService {
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             const data = response.data;
-            const message = data?.messages[0]?.payload?.parts[0]?.body?.data;
-            // const result = data?.messages.map((index) => {
-            //     const payloads = index?.payload?.parts.map((index) => {
-            //         const data = index?.body?.data;
-            //         console.log("DATA:::::", data)
-            //         const decodedResponse = Buffer.from(data, 'base64').toString('utf-8');
-            //         return decodedResponse;
-            //     })
-            //     return payloads;
-            //     // console.log("Payloads:::", payloads);
-            // })
-
             const result = data?.messages.map((index) => {
                 const payloads = index?.payload?.parts[0]?.body?.data
-                console.log("payloads::::::::", payloads);
                 const decodedResponse = Buffer.from(payloads, 'base64').toString('utf-8');
                 return decodedResponse;
             })
-            
-            console.log("RESULT::::", result)
+
+            // console.log("RESULT::::", result)
             return result;
-            // return response.data.drafts;
         } catch (error) {
             console.log(error);
             return error;

@@ -28,19 +28,21 @@
 
 <body>
   <div>
-    <ol >
+
+    <ol>
       {{#each message}}
-      <li onclick="handleClick('{{id}}', '{{message.accessToken}}')">
+      <li class="mails" onclick="handleClick('{{id}}','{{accessToken}}')">
         <p>{{id}}</p>
-        <p class="mails">{{snippet}}</p>
+        <p>{{snippet}}</p>
       </li>
       {{/each}}
     </ol>
   </div>
   <script>
     function handleClick(id, accessToken) {
-      console.log("id", id);
-      console.log("accessToken", accessToken)
+      console.log("id::", id);
+      console.log("AccessToken::", accessToken)
+      window.location.href = `/google/threaddetails?id=${id}&accessToken=${accessToken}`;
     }
   </script>
 </body>

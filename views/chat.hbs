@@ -14,28 +14,38 @@
         }
 
         .mails {
-            background-color: rgb(242, 235, 219);
+            background-color: rgb(255, 216, 126);
             padding: 20px;
             margin: 4px;
         }
 
-        .mail-item {
-            display: flex;
-            justify-content: space-between;
+        .mail-item {}
+
+        button {
+            background-color: rgb(41, 41, 162);
+            font-size: larger;
+            color: white;
         }
     </style>
 </head>
 
 <body>
-    <div>
+    <h1>Conversation</h1>
+    <div class=".mails">
         <ol>
             {{#each message}}
             <li>
-                <p class="mails">{{message}}</p>
+                <p class=".mail-item">s {{threadMessage}}</p>
+                <br>
             </li>
             {{/each}}
         </ol>
+        <button>Response</button>
     </div>
+
+    <script>
+       
+    </script>
 </body>
 
 </html>
