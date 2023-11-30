@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 @Injectable()
 export class GmailInboxService {
@@ -37,7 +37,7 @@ export class GmailInboxService {
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             let messages = response.data.messages;
-            console.log(response.data.messages);
+            // console.log(response.data.messages);
             return response.data.messages;
         } catch (error) {
             // console.log(error);
@@ -45,10 +45,53 @@ export class GmailInboxService {
         }
     }
 
+    async getMailByThreadId(userId: string, accessToken: string) {
+        try {
+            //   const url = `https://gmail.googleapis.com/gmail/v1/users/${userId}/threads/${threadId}`;
+            const url = `https://gmail.googleapis.com/gmail/v1/users/${userId}/threads`;
+
+            const config = this.generateConfig(url, accessToken);
+            const response = await axios(config);
+            return response.data.threads;
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    async getThreadMessage(id: string, accessToken: string): Promise<any> {
+        try {
+            const url = `https://gmail.googleapis.com/gmail/v1/users/rawatsikha112@gmail.com/threads/${id} `;
+            const config = this.generateConfig(url, accessToken);
+            const response = await axios(config);
+            const data = response.data;
+            console.log("Data.messages::", data.messages)
+            const temp = response.data?.messages[0].payload.parts[0]?.body?.data
+            // console.log("TEMP:::", temp)
+            // console.log("temp", temp)
+            const messsage = [];
+            const result = data?.messages?.map((index) => {
+                const payloads = index?.payload?.parts[0]?.body?.data
+
+                if (payloads) {
+                    const decodedResponse = Buffer.from(payloads, 'base64').toString('utf-8');
+                    // console.log("DR:::::::", decodedResponse)
+                    messsage.push(decodedResponse);
+                }
+                return null;
+            })
+            // console.log("messages", messsage[messsage.length - 1])
+            return messsage[messsage.length - 1];
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+
     async getMailList(inboxid: string, accessToken: string): Promise<any> {
         try {
             const mails = await this.getInbox(inboxid, accessToken);
-            console.log("mails::", mails)
+            // console.log("mails::", mails)
 
             if (mails !== null) {
                 const messageID = (mails as { id?: string }[]).map((item) => item?.id);
@@ -148,6 +191,7 @@ export class GmailInboxService {
         try {
 
             const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages?q=label:drafts`;
+
             // const url = `https://gmail.googleapis.com/gmail/v1/users/shikha.rawat@ailoitte.com/gmail.labels`; //https://www.googleapis.com/auth/gmail.labels
             // const url = `https://www.googleapis.com/gmail/v1/users/me/messages`
             const token = process.env.ACCESS_TOKEN;
@@ -170,17 +214,17 @@ export class GmailInboxService {
 
     async getReadMessage(messageId: string, id: string, accessToken: string): Promise<any> {
         try {
-            const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages/${messageId}`;
+            const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages/${messageId}?format=full`;
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
-            // console.log('res', response)
-            return response.data;
+            return response?.data;
             // return response.data.drafts;
         } catch (error) {
             console.log(error);
             return error;
         }
     }
+
 
 
 }

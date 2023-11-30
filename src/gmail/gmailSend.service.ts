@@ -13,7 +13,7 @@ export class GmailSendService {
 
   constructor() {
     // Initialize the OpenAI API client with your API key
-    this.openai = new OpenAI({ apiKey: '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' });
+    this.openai = new OpenAI({ apiKey: process.env.CHATGPT_API });
     this.oAuth2Client = new google.auth.OAuth2(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -28,10 +28,10 @@ export class GmailSendService {
       const transport = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "shikha.rawat@ailoitte.com", // Replace with your Gmail email
+          user: emailContent.mailId, // Replace with your Gmail email
           // You don't need to provide a password if you're using OAuth2
           type: "OAuth2",
-          accessToken: process.env.ACCESS_TOKEN,
+          accessToken: emailContent.accessToken,
           // More auth options if needed
         },
       });
@@ -39,8 +39,8 @@ export class GmailSendService {
       const mailOptions = {
         from: "shikha.rawat@ailoitte.comm", // Replace with your Gmail email
         to: emailContent.to,
-        subject: emailContent.subject,
-        text: emailContent.text,
+        subject: "test via nest",
+        text: emailContent.response,
       };
 
       const result = await transport.sendMail(mailOptions);
@@ -51,13 +51,15 @@ export class GmailSendService {
     }
   }
 
+
   generateEmailResponse(prompt: string, input: string): Promise<string> {
     return this.openai.completions.create({
       prompt: prompt + input,
-      max_tokens: 50,
+      max_tokens: 600,
       model: 'text-davinci-002'
     })
       .then((response) => {
+        // console.log("Response.choice", response.choices[0].text)
         return response.choices[0].text;
       })
       .catch((error) => {

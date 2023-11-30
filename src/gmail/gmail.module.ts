@@ -4,9 +4,7 @@ import { GmailController } from './gmail.controller';
 // import { GmailService } from './gmail.service';
 import { GmailInboxService } from './gmailInbox.service';
 import { GmailSendService } from './gmailSend.service';
-import { SimpleLoggerMiddleware } from 'src/middleware/simple-logger.middleware';
 import { simpleFunc } from 'src/middleware';
-
 
 @Module({
   imports: [],
@@ -14,12 +12,11 @@ import { simpleFunc } from 'src/middleware';
   providers: [GoogleStrategy, GmailInboxService, GmailSendService],
 })
 
-export class GmailModule {
+// export class GmailModule {
 
+// }
+export class GmailModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(simpleFunc).forRoutes('google/threaddetails');
+  }
 }
-// export class GmailModule implements NestModule
-// {
-//   configure(consumer: MiddlewareConsumer) {
-//       consumer.apply(simpleFunc).forRoutes('google');
-//   }
-//  }
