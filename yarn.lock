@@ -3299,6 +3299,8 @@ extract-css@^3.0.1:
     href-content "^2.0.2"
     list-stylesheets "^2.0.1"
     style-data "^2.0.1"
+<<<<<<< HEAD
+=======
 
 fast-content-type-parse@^1.1.0:
   version "1.1.0"
@@ -3309,6 +3311,7 @@ fast-decode-uri-component@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/fast-decode-uri-component/-/fast-decode-uri-component-1.0.1.tgz"
   integrity sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==
+>>>>>>> 44de74b2d7d5b7220e8d50b283eafcbd2a7bb8ec
 
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
@@ -3354,6 +3357,8 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   resolved "https://registry.npmjs.org/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz"
   integrity sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==
 
+<<<<<<< HEAD
+=======
 fast-querystring@^1.0.0:
   version "1.1.2"
   resolved "https://registry.npmjs.org/fast-querystring/-/fast-querystring-1.1.2.tgz"
@@ -3366,6 +3371,7 @@ fast-redact@^3.1.1:
   resolved "https://registry.npmjs.org/fast-redact/-/fast-redact-3.3.0.tgz"
   integrity sha512-6T5V1QK1u4oF+ATxs1lWUmlEk6P2T9HqJG3e2DnHOdVgZy2rFJBoEnrIedcTXlkAHU/zKC+7KETJ+KGGKwxgMQ==
 
+>>>>>>> 44de74b2d7d5b7220e8d50b283eafcbd2a7bb8ec
 fast-safe-stringify@^2.1.1, fast-safe-stringify@2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz"
@@ -3953,11 +3959,14 @@ has@^1.0.3:
   resolved "https://registry.npmjs.org/has/-/has-1.0.4.tgz"
   integrity sha512-qdSAmqLF6209RFj4VVItywPMbm3vWylknmB3nvNiUIs72xAimcM8nVYxYr7ncvZq5qzk9MKIZR8ijqD/1QuYjQ==
 
+<<<<<<< HEAD
+=======
 hashlru@^2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/hashlru/-/hashlru-2.3.0.tgz"
   integrity sha512-0cMsjjIC8I+D3M44pOQdsy0OHXGLVz6Z0beRuufhKa0KfaD2wGwAev6jILzXsd3/vpnNQJmWyZtIILqM1N+n5A==
 
+>>>>>>> 44de74b2d7d5b7220e8d50b283eafcbd2a7bb8ec
 hbs@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npmjs.org/hbs/-/hbs-4.2.0.tgz"
@@ -6934,6 +6943,8 @@ readable-stream@^3.4.0:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
+<<<<<<< HEAD
+=======
 readable-stream@^4.0.0:
   version "4.4.2"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-4.4.2.tgz"
@@ -6945,6 +6956,7 @@ readable-stream@^4.0.0:
     process "^0.11.10"
     string_decoder "^1.3.0"
 
+>>>>>>> 44de74b2d7d5b7220e8d50b283eafcbd2a7bb8ec
 readable-stream@1.1.x:
   version "1.1.14"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-1.1.14.tgz"

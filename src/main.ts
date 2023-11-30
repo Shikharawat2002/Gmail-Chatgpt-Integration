@@ -3,8 +3,6 @@ import { AppModule } from './app.module';
 import { NextFunction } from 'express';
 import dotenv from 'dotenv';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { NestFastifyApplication, FastifyAdapter } from '@nestjs/platform-fastify';
-
 import { join } from 'path';
 dotenv.config();
 
