@@ -50,15 +50,22 @@ export class GmailController {
   ) {
     try {
       const result = await this.gmailInboxService.getThreadMessage(id, accessToken);
+      console.log("result", result);
+      // if (result && Array.isArray(result)) {
+      //   const userDetails = result.map((element) => ({
+      //     threadMessage: element,
+      //   }));
+      //   // console.log('userDetails', userDetails);
+      //   return { message: userDetails };
+      // }
+      // return { message: [{ threadMessage: 'No messages to show' }] };
+      const separatedStrings = result.split('________________________________');
+      // console.log("separatedStrings  0:::::", separatedStrings[0])
+      // console.log("separatedStrings  1:::", separatedStrings[1])
+      // console.log("separatedStrings   2:::", separatedStrings[2])
 
-      if (result && Array.isArray(result)) {
-        const userDetails = result.map((element) => ({
-          threadMessage: element,
-        }));
-        // console.log('userDetails', userDetails);
-        return { message: userDetails };
-      }
-      return { message: [{ threadMessage: 'No messages to show' }] };
+
+      return { message: separatedStrings }
     } catch (error) {
       console.error(error);
       return { message: 'Error fetching messages' };

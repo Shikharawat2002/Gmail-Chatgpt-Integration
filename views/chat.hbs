@@ -39,7 +39,7 @@
         <ol>
             {{#each message}}
             <li>
-                <p class="mail-item">{{threadMessage}}</p>
+                <p class="mail-item">{{this}}</p>
                 <br>
             </li>
             {{/each}}
@@ -59,7 +59,7 @@
             if (messages.length > 0) {
                 var concatenatedMessage = Array.from(messages).map(function (message) {
                     return message.textContent.trim();
-                })
+                }).join();
                 handleGenerateResponse(concatenatedMessage)
 
                 console.log("Concatenated Message:", concatenatedMessage);

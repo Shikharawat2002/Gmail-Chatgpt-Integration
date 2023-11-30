@@ -59,6 +59,35 @@ export class GmailInboxService {
         }
     }
 
+    async getThreadMessage(id: string, accessToken: string): Promise<any> {
+        try {
+            const url = `https://gmail.googleapis.com/gmail/v1/users/rawatsikha112@gmail.com/threads/${id} `;
+            const config = this.generateConfig(url, accessToken);
+            const response = await axios(config);
+            const data = response.data;
+            console.log("Data.messages::", data.messages)
+            const temp = response.data?.messages[0].payload.parts[0]?.body?.data
+            // console.log("TEMP:::", temp)
+            // console.log("temp", temp)
+            const messsage = [];
+            const result = data?.messages?.map((index) => {
+                const payloads = index?.payload?.parts[0]?.body?.data
+
+                if (payloads) {
+                    const decodedResponse = Buffer.from(payloads, 'base64').toString('utf-8');
+                    // console.log("DR:::::::", decodedResponse)
+                    messsage.push(decodedResponse);
+                }
+                return null;
+            })
+            // console.log("messages", messsage[messsage.length - 1])
+            return messsage[messsage.length - 1];
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+
     async getMailList(inboxid: string, accessToken: string): Promise<any> {
         try {
             const mails = await this.getInbox(inboxid, accessToken);
@@ -196,29 +225,6 @@ export class GmailInboxService {
         }
     }
 
-    async getThreadMessage(id: string, accessToken: string): Promise<any> {
-        try {
-            const url = `https://gmail.googleapis.com/gmail/v1/users/rawatsikha112@gmail.com/threads/${id} `;
-            const config = this.generateConfig(url, accessToken);
-            const response = await axios(config);
-            const data = response.data;
-            const temp = response.data?.messages[0].payload.parts
-            console.log("temp", temp)
-            const result = data?.messages?.map((index) => {
-                const payloads = index?.payload?.parts[0]?.body?.data
 
-                if (payloads) {
-                    const decodedResponse = Buffer.from(payloads, 'base64').toString('utf-8');
-                    return decodedResponse;
-                }
-                return null;
-            })
-            // console.log("RESULT::::", result)
-            return result;
-        } catch (error) {
-            console.log(error);
-            return error;
-        }
-    }
 
 }
