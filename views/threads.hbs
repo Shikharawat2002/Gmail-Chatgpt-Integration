@@ -31,7 +31,7 @@
 
     <ol>
       {{#each message}}
-      <li class="mails" onclick="handleClick('{{id}}','{{accessToken}}')">
+      <li class="mails" onclick="handleClick('{{id}}','{{accessToken}}','{{email}}' )">
         <p>{{id}}</p>
         <p>{{snippet}}</p>
       </li>
@@ -39,10 +39,8 @@
     </ol>
   </div>
   <script>
-    function handleClick(id, accessToken) {
-      console.log("id::", id);
-      console.log("AccessToken::", accessToken)
-      window.location.href = `/google/threaddetails?id=${id}&accessToken=${accessToken}`;
+    function handleClick(id, accessToken, email) {
+      window.location.href = `/google/threaddetails?id=${id}&accessToken=${accessToken}&email=${email}`;
     }
   </script>
 </body>

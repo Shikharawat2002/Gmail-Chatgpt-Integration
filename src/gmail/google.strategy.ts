@@ -25,7 +25,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     // const queryParams = url.parse(accessToken.url, true).query;
     // console.log("QueryParams", queryParams)
     console.log("RefreshToken:::", refreshToken);
-    const { name, emails, picture } = profile
+    const { name, emails } = profile
     const user = {
       email: emails[0].value,
       firstName: name.givenName,

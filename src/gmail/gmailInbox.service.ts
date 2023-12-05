@@ -59,34 +59,38 @@ export class GmailInboxService {
         }
     }
 
-    async getThreadMessage(id: string, accessToken: string): Promise<any> {
+    async getUserDetails(id: string, accessToken: string, email) {
         try {
-            const url = `https://gmail.googleapis.com/gmail/v1/users/rawatsikha112@gmail.com/threads/${id} `;
+            const url = `https://gmail.googleapis.com/gmail/v1/users/${email}/threads/${id} `;
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             const data = response.data;
-            console.log("Data.messages::", data.messages)
+            // console.log(" user details data::", data)
+            // console.log("Respose getUserDetails", response)
+
+
             const temp = response.data?.messages[0].payload.parts[0]?.body?.data
             // console.log("TEMP:::", temp)
             // console.log("temp", temp)
-            const messsage = [];
+            const message = [];
             const result = data?.messages?.map((index) => {
                 const payloads = index?.payload?.parts[0]?.body?.data
 
                 if (payloads) {
                     const decodedResponse = Buffer.from(payloads, 'base64').toString('utf-8');
-                    // console.log("DR:::::::", decodedResponse)
-                    messsage.push(decodedResponse);
+                    console.log("DR:::::::", decodedResponse)
+                    message.push(decodedResponse);
                 }
                 return null;
             })
-            // console.log("messages", messsage[messsage.length - 1])
-            return messsage[messsage.length - 1];
-        } catch (error) {
-            console.log(error);
-            return error;
+            console.log("message:::::::::::::", message)
+            // return messsage[messsage.length - 1];
+            return { data, message };
+        } catch (err) {
+            return err;
         }
     }
+
 
     async getMailList(inboxid: string, accessToken: string): Promise<any> {
         try {
@@ -178,8 +182,8 @@ export class GmailInboxService {
             const url = `https://gmail.googleapis.com/gmail/v1/users/${id}/messages?q=label:sent`;
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
-            let messages = response.data.messages;
-            return response.data.messages;
+            let message = response.data.messages;
+            return message;
         } catch (error) {
             console.log(error);
             return error;
@@ -194,7 +198,6 @@ export class GmailInboxService {
 
             // const url = `https://gmail.googleapis.com/gmail/v1/users/shikha.rawat@ailoitte.com/gmail.labels`; //https://www.googleapis.com/auth/gmail.labels
             // const url = `https://www.googleapis.com/gmail/v1/users/me/messages`
-            const token = process.env.ACCESS_TOKEN;
             const config = this.generateConfig(url, accessToken);
             const response = await axios(config);
             let messages = response.data.messages;
@@ -224,7 +227,33 @@ export class GmailInboxService {
             return error;
         }
     }
-
-
-
 }
+// async getThreadMessage(id: string, accessToken: string): Promise<any> {
+//     try {
+//         const url = `https://gmail.googleapis.com/gmail/v1/users/rawatsikha112@gmail.com/threads/${id} `;
+//         const config = this.generateConfig(url, accessToken);
+//         const response = await axios(config);
+//         const data = response.data;
+//         // console.log("Data.messages::", data.messages)
+//         const temp = response.data?.messages[0].payload.parts[0]?.body?.data
+//         // console.log("TEMP:::", temp)
+//         // console.log("temp", temp)
+//         const message = [];
+//         const result = data?.messages?.map((index) => {
+//             const payloads = index?.payload?.parts[0]?.body?.data
+
+//             if (payloads) {
+//                 const decodedResponse = Buffer.from(payloads, 'base64').toString('utf-8');
+//                 // console.log("DR:::::::", decodedResponse)
+//                 message.push(decodedResponse);
+//             }
+//             return null;
+//         })
+//         console.log("messages", message)
+//         // return message[message.length - 1];
+//         return message;
+//     } catch (error) {
+//         console.log(error);
+//         return error;
+//     }
+// }

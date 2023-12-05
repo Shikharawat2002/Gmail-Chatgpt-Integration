@@ -28,7 +28,7 @@ export class GmailSendService {
       const transport = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: emailContent.mailId, // Replace with your Gmail email
+          user: emailContent.from, // Replace with your Gmail email
           // You don't need to provide a password if you're using OAuth2
           type: "OAuth2",
           accessToken: emailContent.accessToken,
@@ -36,17 +36,22 @@ export class GmailSendService {
         },
       });
 
+
       const mailOptions = {
-        from: "shikha.rawat@ailoitte.comm", // Replace with your Gmail email
-        to: emailContent.to,
-        subject: "test via nest",
-        text: emailContent.response,
+        from: emailContent.to, // Replace with your Gmail email
+        to: emailContent.from,
+        subject: emailContent.subject || 'No Subject',
+        text: emailContent.chatgptResponse,
+        inReplyTo: emailContent.replyTo, // Set this to the Message-ID of the parent email
+        references: emailContent.reference,
       };
+      // console.log("mailoptions", mailOptions);
 
       const result = await transport.sendMail(mailOptions);
-      return result;
+      console.log('result in service:::', result)
+      // return result;
     } catch (error) {
-      console.log(error);
+      console.log("error in service:::", error);
       return error;
     }
   }

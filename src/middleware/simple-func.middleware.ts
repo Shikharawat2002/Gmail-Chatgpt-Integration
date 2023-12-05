@@ -5,8 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 export class simpleFunc implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     req.user = req?.query;
-    // console.log('Request...', req?.query);
-    // console.log("Req.user", req?.user)
+    console.log("Req.user", req?.user)
     next();
   }
 }
