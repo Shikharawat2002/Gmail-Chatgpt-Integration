@@ -104,7 +104,7 @@ export class GmailController {
       console.log("email for middleware", email)
       emailContent.threadId = httpContentId;
       emailContent.accessToken = accessToken;
-      emailContent.from = email;
+      emailContent.email = email;
       // console.log("EmailContent", emailContent)
     }
     return this.gmailSendService.sendMail(emailContent);

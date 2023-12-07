@@ -38,7 +38,7 @@ export class GmailSendService {
       console.log('emailContent::', emailContent)
 
       const mailOptions = {
-        from: emailContent.from, // Replace with your Gmail email
+        from: emailContent.email, // Replace with your Gmail email
         to: emailContent.to,
         subject: emailContent.subject || 'No Subject',
         text: emailContent.chatgptResponse,

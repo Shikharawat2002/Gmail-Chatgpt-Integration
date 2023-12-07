@@ -85,7 +85,7 @@ export class GmailInboxService {
             //     }
             // })
 
-            for (let index = 0; index < data?.messages?.length - 1; index++) {
+            for (let index = 0; index < data?.messages?.length; index++) {
 
                 console.log("\n index", index)
                 const element = data?.messages[index]

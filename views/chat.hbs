@@ -136,6 +136,13 @@
             return toText;
         }
 
+        //get from 
+        function getFrom() {
+            const toFrom = document.querySelector(".from")
+            const from = toFrom.textContent;
+            console.log("to:::", from)
+            return from;
+        }
 
         //get subject
         function getSubject() {
@@ -146,8 +153,8 @@
         }
 
         function getReference() {
-            const subjectAddress = document.querySelector(".reference")
-            const subjectText = subjectAddress.textContent;
+            const referenceAddress = document.querySelector(".reference")
+            const subjectText = referenceAddress.textContent;
             console.log("reference:::", subjectText)
             return subjectText;
         }
@@ -167,6 +174,9 @@
             //get To address
             const to = getTo();
 
+            //get from 
+            const from = getFrom();
+
             //get subject
             const subject = getSubject()
 
@@ -178,6 +188,7 @@
             const emailContent = {
                 chatgptResponse: chatgptResponse,
                 to: trimStr(to),
+                from: trimStr(from),
                 subject: subject,
                 reference: reference,
                 replyTo: replyTo
