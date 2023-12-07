@@ -19,7 +19,15 @@
             margin: 4px;
         }
 
-        .mail-item {}
+        .details {
+            background-color: antiquewhite;
+            padding: 20px;
+            margin: 4px;
+        }
+
+        .hidden {
+            display: none;
+        }
 
         button {
             background-color: rgb(41, 41, 162);
@@ -34,14 +42,13 @@
 </head>
 
 <body>
-    <h1>Conversation</h1>
     <div class=".mails">
         <div class="details">
             <h3> From::<span class="from"> {{message.from}}</span></h3>
             <h3> To:: <span class="to">{{message.to}}</span></h3>
             <h3>Subject::<span class="subject">{{message.subject}}</span></h3>
-            <h3>reference::<span class="reference">{{message.reference}}</span></h3>
-            <h3>replyTo::<span class="replyTo">{{message.replyTo}}</span></h3>
+            <h3 class="hidden">reference::<span class="reference">{{message.reference}}</span></h3>
+            <h3 class="hidden">replyTo::<span class="replyTo">{{message.replyTo}}</span></h3>
         </div>
         <ol>
             {{#each message.result}}
@@ -125,69 +132,64 @@
         function getTo() {
             const toAddress = document.querySelector(".to")
             const toText = toAddress.textContent;
+            console.log("to:::", toText)
             return toText;
         }
 
-        //get from
-        function getFrom() {
-            const fromAddress = document.querySelector(".from")
-            const fromText = fromAddress.textContent;
-            return fromText;
-        }
 
         //get subject
         function getSubject() {
             const subjectAddress = document.querySelector(".subject")
             const subjectText = subjectAddress.textContent;
+            console.log("subject:::", subjectText)
             return subjectText;
         }
 
         function getReference() {
             const subjectAddress = document.querySelector(".reference")
             const subjectText = subjectAddress.textContent;
+            console.log("reference:::", subjectText)
             return subjectText;
         }
 
         function getReplyTo() {
             const subjectAddress = document.querySelector(".replyTo")
             const subjectText = subjectAddress.textContent;
+
+            console.log("replyTo:::", subjectText)
             return subjectText;
         }
-
-
-
-        //Send function
-        function handleSendResponse() {
+        function emailContents() {
             //get GPT REsponse
             const chatgptResponse = getChatResponse();
             console.log("chatgptREsponse::::", chatgptResponse)
 
-            //get from address 
-            const from = getFrom();
-            console.log("From:::", from)
-
             //get To address
             const to = getTo();
-            console.log("TO::::", to);
 
             //get subject
             const subject = getSubject()
-            console.log("Subject:::", subject)
 
             const reference = getReference()
-            console.log("reference:::", reference)
 
-            const replyTo = getReference()
-            console.log("replyTo:::", replyTo)
+
+            const replyTo = getReplyTo()
 
             const emailContent = {
                 chatgptResponse: chatgptResponse,
-                from: trimStr(from),
                 to: trimStr(to),
                 subject: subject,
                 reference: reference,
                 replyTo: replyTo
             }
+            console.log("EmailContent::", emailContent)
+            return emailContent
+        }
+
+
+        //Send function
+        function handleSendResponse() {
+            const emailContent = emailContents()
 
             fetch(`/google/send-email`, {
                 method: "Post",
@@ -196,6 +198,10 @@
                 },
                 body: JSON.stringify(emailContent)
             })
+                .then(function (response) {
+                    console.log(response.json)
+                })
+
 
         }
 

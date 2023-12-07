@@ -35,17 +35,19 @@ export class GmailSendService {
           // More auth options if needed
         },
       });
-
+      console.log('emailContent::', emailContent)
 
       const mailOptions = {
-        from: emailContent.to, // Replace with your Gmail email
-        to: emailContent.from,
+        from: emailContent.from, // Replace with your Gmail email
+        to: emailContent.to,
         subject: emailContent.subject || 'No Subject',
         text: emailContent.chatgptResponse,
         inReplyTo: emailContent.replyTo, // Set this to the Message-ID of the parent email
         references: emailContent.reference,
       };
-      // console.log("mailoptions", mailOptions);
+
+
+      console.log("mailoptions", mailOptions);
 
       const result = await transport.sendMail(mailOptions);
       console.log('result in service:::', result)

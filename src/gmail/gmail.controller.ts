@@ -66,13 +66,13 @@ export class GmailController {
       if (temp) {
         const from = temp[temp.length - 1]?.payload.headers.find((From) => From.name === 'From')
         const to = temp[temp.length - 1]?.payload.headers.find((To) => To.name === 'To')
-        const subject = temp[temp.length - 1]?.payload.headers.find((Subject) => Subject.name === 'Thread-Topic')
+        const subject = temp[temp.length - 1]?.payload.headers.find((Subject) => Subject.name === 'Subject')
         const reference = temp[temp.length - 1]?.payload.headers.find((References) => References.name === 'References')
         const replyTo = temp[temp.length - 1]?.payload.headers.find((replyTo) => replyTo.name === 'In-Reply-To')
-        // console.log("From:::::", from?.value)
-        // console.log("To::::", to?.value)
-        // console.log("subject::::", subject?.value)
-
+        console.log("From:::::", from?.value)
+        console.log("To::::", to?.value)
+        console.log("subject::::", subject?.value)
+        // console.log("details.message", details.message)
         return {
           message: {
             result: details?.message,
@@ -100,8 +100,11 @@ export class GmailController {
       const refererUrl = new URL(refererHeader);
       const httpContentId = refererUrl.searchParams.get('id');
       const accessToken = refererUrl.searchParams.get('accessToken');
+      const email = refererUrl.searchParams.get('email')
+      console.log("email for middleware", email)
       emailContent.threadId = httpContentId;
       emailContent.accessToken = accessToken;
+      emailContent.from = email;
       // console.log("EmailContent", emailContent)
     }
     return this.gmailSendService.sendMail(emailContent);
