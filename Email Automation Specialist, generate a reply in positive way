@@ -1,0 +1,113 @@
+[33mcommit 95c6bf654935bd05e45409ba48926778642e3027[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/gmail[m[33m, [m[1;31morigin/feature/gmail[m[33m)[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Wed Nov 29 12:53:17 2023 +0530
+
+    show all messages of a thread
+
+[33mcommit e30cbf32f93ac5dd19599128737897afe23d0c04[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Tue Nov 28 18:30:07 2023 +0530
+
+    Added thread list
+
+[33mcommit 99d2e0470dd8a5955de7c0cde6beaad04aa5466a[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Tue Nov 28 12:24:34 2023 +0530
+
+    update response
+
+[33mcommit a29de4f1f439e1ca8ede7fd529cd41c1a4291880[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Thu Nov 23 18:25:20 2023 +0530
+
+    generate chatgpt response successfully
+
+[33mcommit bea56fa14b342c82699fbcfeacc583b2df2592b6[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Thu Nov 23 13:25:05 2023 +0530
+
+    messages read
+
+[33mcommit 44de74b2d7d5b7220e8d50b283eafcbd2a7bb8ec[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Tue Nov 21 16:31:05 2023 +0530
+
+    render template for home mail
+
+[33mcommit 9aa0ba46108021317a3cf946dff500fc72f844e9[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Mon Nov 20 11:23:37 2023 +0530
+
+    issue with main js
+
+[33mcommit 35f765d6456fe57b407cf1a48b4c26c58252a677[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Fri Nov 17 17:53:51 2023 +0530
+
+    removed env
+
+[33mcommit 53123e7a53e97cd32fc7292c0e43ac2944e94831[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Fri Nov 17 17:52:15 2023 +0530
+
+    removed book module and integrate hbs and viws
+
+[33mcommit bf851c8cce0f8af20d1d53ba0e5b3bf14d1a48e3[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Tue Nov 14 18:47:54 2023 +0530
+
+    update all routes for accessToken
+
+[33mcommit b912f075f3f858c6abdea482f28269220dedf2c1[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: shikha <rawatsikha111@gamil.com>
+Date:   Mon Nov 13 19:16:45 2023 +0530
+
+    possport authentication complted
+
+[33mcommit b1c3bafeece26ce71075561f8d0c8e3b20941746[m
+Author: --local <shikha.rawat@ailoitte.com>
+Date:   Sun Nov 5 14:12:23 2023 +0530
+
+    successfully added transport for send mails
+
+[33mcommit ed6d1c146832660e1853181b649c23903c0b7776[m
+Author: --local <shikha.rawat@ailoitte.com>
+Date:   Fri Nov 3 10:51:56 2023 +0530
+
+    added googleapi to access mail inbox
+
+[33mcommit b9ff042e237fd9e5f118bad2d400d2e4ac298666[m
+Author: --local <shikha.rawat@ailoitte.com>
+Date:   Wed Nov 1 11:13:39 2023 +0530
+
+    successfull authentication and access token
+
+[33mcommit 0a1e45db6b6df87a79d7989c48f12a2171d7e1d9[m[33m ([m[1;32mbug[m[33m, [m[1;32mauth[m[33m)[m
+Author: --local <shikha.rawat@ailoitte.com>
+Date:   Wed Nov 1 07:28:56 2023 +0530
+
+    gmail autheraization
+
+[33mcommit d1b650c7a4829404d56d257ea2af7ff29ac8daed[m
+Author: --local <rawatsikha112@gmail.com>
+Date:   Thu Oct 26 18:16:16 2023 +0530
+
+    Done
+
+[33mcommit 8040320290d32aef6507d1a7c57ab50fff8fce49[m
+Author: --local <rawatsikha112@gmail.com>
+Date:   Thu Oct 26 13:01:18 2023 +0530
+
+    add monogdb
+
+[33mcommit 298b8737aa5a962bf1c879eda7164e625e8ee96a[m[33m ([m[1;32mfeatures[m[33m)[m
+Author: --local <shikha.rawat@ailoitte.com>
+Date:   Mon Oct 23 19:19:58 2023 +0530
+
+    Intial commit
+
+[33mcommit 119096d35ab8b4c252f61f2f6b0c553ef4270d9c[m
+Author: Shikharawat2002 <shikha.rawat@ailoitte.com>
+Date:   Mon Oct 23 17:25:07 2023 +0530
+
+    first commit

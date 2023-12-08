@@ -11,10 +11,9 @@ export class GmailSendService {
   private openai;
   private oAuth2Client;
 
-
   constructor() {
     // Initialize the OpenAI API client with your API key
-    this.openai = new OpenAI({ apiKey: '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' });
+    this.openai = new OpenAI({ apiKey: process.env.CHATGPT_API });
     this.oAuth2Client = new google.auth.OAuth2(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -29,36 +28,44 @@ export class GmailSendService {
       const transport = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "shikha.rawat@ailoitte.com", // Replace with your Gmail email
+          user: emailContent.from, // Replace with your Gmail email
           // You don't need to provide a password if you're using OAuth2
-          type: "OAuth2",
-          accessToken: process.env.ACCESS_TOKEN,
+          type: 'OAuth2',
+          accessToken: emailContent.accessToken,
           // More auth options if needed
         },
       });
+      console.log('emailContent::', emailContent)
 
       const mailOptions = {
-        from: "shikha.rawat@ailoitte.comm", // Replace with your Gmail email
-        to: emailContent.to,
-        subject: emailContent.subject,
-        text: emailContent.text,
+        from: emailContent.email,// emailContent.email, // Replace with your Gmail email
+        to: emailContent.from,//emailContent.from,
+        subject: emailContent.subject || 'No Subject',
+        text: emailContent.chatgptResponse,
+        inReplyTo: emailContent.replyTo, // Set this to the Message-ID of the parent email
+        references: emailContent.reference,
       };
 
+      console.log("mailoptions", mailOptions);
+
       const result = await transport.sendMail(mailOptions);
-      return result;
+      console.log('result in service:::', result)
+      // return result;
     } catch (error) {
-      console.log(error);
+      console.log("error in service:::", error);
       return error;
     }
   }
 
+
   generateEmailResponse(prompt: string, input: string): Promise<string> {
     return this.openai.completions.create({
       prompt: prompt + input,
-      max_tokens: 50,
+      max_tokens: 600,
       model: 'text-davinci-002'
     })
       .then((response) => {
+        // console.log("Response.choice", response.choices[0].text)
         return response.choices[0].text;
       })
       .catch((error) => {
