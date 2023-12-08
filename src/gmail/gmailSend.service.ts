@@ -30,7 +30,7 @@ export class GmailSendService {
         auth: {
           user: emailContent.from, // Replace with your Gmail email
           // You don't need to provide a password if you're using OAuth2
-          type: "OAuth2",
+          type: 'OAuth2',
           accessToken: emailContent.accessToken,
           // More auth options if needed
         },
@@ -38,14 +38,13 @@ export class GmailSendService {
       console.log('emailContent::', emailContent)
 
       const mailOptions = {
-        from: emailContent.email, // Replace with your Gmail email
-        to: emailContent.to,
+        from: emailContent.email,// emailContent.email, // Replace with your Gmail email
+        to: emailContent.from,//emailContent.from,
         subject: emailContent.subject || 'No Subject',
         text: emailContent.chatgptResponse,
         inReplyTo: emailContent.replyTo, // Set this to the Message-ID of the parent email
         references: emailContent.reference,
       };
-
 
       console.log("mailoptions", mailOptions);
 
