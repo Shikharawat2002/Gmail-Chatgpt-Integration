@@ -30,15 +30,25 @@ export class GmailController {
     }
     const myMail = await this.gmailInboxService.getMailByThreadId(user.email, user.accessToken);
     let userDetails = [];
-    myMail.forEach(element => {
-      // console.log("element:;", element)
+    if (myMail) {
+      myMail.forEach(element => {
+        // console.log("element:;", element)
+        userDetails.push({
+          id: element.id,
+          snippet: element.snippet,
+          accessToken: user.accessToken,
+          email: user.email
+        })
+      })
+    }
+    else {
       userDetails.push({
-        id: element.id,
-        snippet: element.snippet,
+        id: '1',
+        snippet: 'no mail',
         accessToken: user.accessToken,
         email: user.email
       })
-    })
+    }
     // console.log("userDetails", userDetails)
     // console.log("accessToken", user.accessToken)
     return { message: userDetails }
@@ -89,7 +99,6 @@ export class GmailController {
       return { message: 'Error fetching messages' };
     }
   }
-
 
   @Post('send-email')
   async sendEmail(@Req() req,
