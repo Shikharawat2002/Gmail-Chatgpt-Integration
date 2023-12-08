@@ -8,7 +8,7 @@
     ],
     "routes": [
         {
-            "src": "/(.*)",
+            "src": "/google(.*)",
             "dest": "src/main.d.ts",
             "methods": [
                 "GET",
