@@ -1,21 +1,17 @@
 {
     "version": 2,
     "builds": [
-        {
-            "src": "src/main.d.ts",
-            "use": "@vercel/node"
-        }
+      {
+        "src": "main.ts",
+        "use": "@vercel/node"
+      }
     ],
     "routes": [
-        {
-            "src": "/google(.*)",
-            "dest": "src/main.d.ts",
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        }
+      {
+        "src": "/google",
+        "dest": "main.ts",
+        "methods": ["GET", "POST", "PUT", "DELETE"]
+      }
     ]
-}
+  }
+  
