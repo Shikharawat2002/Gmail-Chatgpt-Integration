@@ -23,39 +23,98 @@ export class GmailSendService {
   }
 
 
-  async sendMail(emailContent: any): Promise<SentMessageInfo> {
-    try {
-      const transport = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: emailContent.from, // Replace with your Gmail email
-          // You don't need to provide a password if you're using OAuth2
-          type: 'OAuth2',
-          accessToken: emailContent.accessToken,
-          // More auth options if needed
-        },
-      });
-      console.log('emailContent::', emailContent)
+  // async sendMail(emailContent: any): Promise<SentMessageInfo> {
+  //   try {
+  //     const transport = nodemailer.createTransport({
+  //       service: "gmail",
+  //       auth: {
+  //         user: emailContent.from,
+  //         type: 'OAuth2',
+  //         accessToken: emailContent.accessToken,
+  //       },
+  //     });
 
-      const mailOptions = {
-        from: emailContent.email,// emailContent.email, // Replace with your Gmail email
-        to: emailContent.from,//emailContent.from,
-        subject: emailContent.subject || 'No Subject',
-        text: emailContent.chatgptResponse,
-        inReplyTo: emailContent.replyTo, // Set this to the Message-ID of the parent email
-        references: emailContent.reference,
+  //     let deliverTo;
+  //     if (emailContent.currentEmailId === emailContent.to) {
+  //       deliverTo = emailContent.from;
+  //     } else {
+  //       deliverTo = emailContent.to;
+  //     }
+
+  //     const mailOptions = {
+  //       from: emailContent.currentEmailId,
+  //       to: deliverTo,
+  //       subject: emailContent.subject || 'No Subject',
+  //       text: emailContent.chatgptResponse,
+  //       inReplyTo: emailContent.replyTo,
+  //       references: emailContent.reference,
+  //     };
+
+  //     console.log("mailoptions", mailOptions);
+
+  //     const result = await transport.sendMail(mailOptions);
+  //     console.log('result in service:::', result);
+  //     return result;
+  //   } catch (error) {
+  //     console.log("error in service:::", error);
+  //     return error;
+  //   }
+  // }
+
+  async sendMail(emailContent: any): Promise<any> {
+    try {
+      let deliverTo;
+      if (emailContent.currentEmailId === emailContent.to) {
+        deliverTo = emailContent.from;
+      } else {
+        deliverTo = emailContent.to;
+      }
+      console.log("deliverTo::", deliverTo)
+      // Replace {userId} with the actual email address of the user
+      const userId = emailContent.currentEmailId;
+
+      // Construct the RFC822 formatted email payload
+      const emailPayload = `From: ${userId}
+To: ${deliverTo}
+Subject: ${emailContent.subject}
+In-Reply-To: ${emailContent.inReplyTo}
+References: ${emailContent.reference}
+Content-Type: text/plain; charset="UTF-8"
+${emailContent.chatgptResponse}`;
+
+      // Encode email content in Base64
+      const encodedEmailContent = Buffer.from(emailPayload).toString('base64');
+
+      console.log("encodedEmailContent::", encodedEmailContent);
+
+      // Construct the request payload
+      const requestPayload = {
+        raw: encodedEmailContent,
       };
 
-      console.log("mailoptions", mailOptions);
+      const response = await fetch(
+        `https://gmail.googleapis.com/gmail/v1/users/${userId}/messages/send`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${emailContent.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestPayload),
+        }
+      );
 
-      const result = await transport.sendMail(mailOptions);
-      console.log('result in service:::', result)
-      // return result;
+      const responseData = await response.json();
+
+      // Return the response from the Gmail API
+      console.log("send response data", responseData);
+      return responseData;
     } catch (error) {
-      console.log("error in service:::", error);
-      return error;
+      console.error("Error sending email:", error);
+      throw error;
     }
   }
+
 
 
   generateEmailResponse(prompt: string, input: string): Promise<string> {

@@ -12,7 +12,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_SECRET,
       callbackURL: 'http://localhost:3000/google/redirect', //process.env.REDIRECT_URI,
-      scope: ['email', 'profile', 'https://mail.google.com/', 'https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.compose', 'https://www.googleapis.com/auth/gmail.send'],
+      scope: ['email', 'profile', 'https://www.googleapis.com/auth/gmail.settings.sharing','https://mail.google.com/', 'https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.compose', 'https://www.googleapis.com/auth/gmail.send'],
       passReqToCallback: false,
       access_type: 'offline',
       prompt: 'consent',

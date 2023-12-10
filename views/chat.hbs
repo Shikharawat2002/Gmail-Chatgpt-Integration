@@ -47,6 +47,9 @@
             <h3> From::<span class="from"> {{message.from}}</span></h3>
             <h3> To:: <span class="to">{{message.to}}</span></h3>
             <h3>Subject::<span class="subject">{{message.subject}}</span></h3>
+            <h3>Current Email ID::<span class="currentEmailId">{{message.currentEmailId}}</span></h3>
+            <h3>threadId::<span class="threadId">{{message.threadId}}</span></h3>
+            <h3>accessToken::<span class="accessToken">{{message.accessToken}}</span></h3>
             <h3 class="hidden">reference::<span class="reference">{{message.reference}}</span></h3>
             <h3 class="hidden">replyTo::<span class="replyTo">{{message.replyTo}}</span></h3>
         </div>
@@ -140,7 +143,7 @@
         function getFrom() {
             const toFrom = document.querySelector(".from")
             const from = toFrom.textContent;
-            console.log("to:::", from)
+            console.log("from:::", from)
             return from;
         }
 
@@ -166,6 +169,26 @@
             console.log("replyTo:::", subjectText)
             return subjectText;
         }
+
+        function getAccessToken() {
+            const address = document.querySelector('.accessToken')
+            const accessToken = address.textContent;
+            console.log("accessTOken form get function::", accessToken)
+            return accessToken;
+        }
+
+        function getCurrentEmailId() {
+            const address = document.querySelector('.currentEmailId')
+            const currentEmailId = address.textContent;
+            console.log("current Email from get methood::", currentEmailId)
+            return currentEmailId;
+        }
+
+        function getThreadId() {
+            const address = document.querySelector('.threadId')
+            const threadId = address.textContent;
+            console.log("threadID form get method::", threadId)
+        }
         function emailContents() {
             //get GPT REsponse
             const chatgptResponse = getChatResponse();
@@ -180,6 +203,15 @@
             //get subject
             const subject = getSubject()
 
+            //get accessToken
+            const accessToken = getAccessToken()
+
+            //get threadId
+            const threadId = getThreadId()
+
+            //get current email
+            const currentEmailId = getCurrentEmailId()
+
             const reference = getReference()
 
 
@@ -191,7 +223,10 @@
                 from: trimStr(from),
                 subject: subject,
                 reference: reference,
-                replyTo: replyTo
+                replyTo: replyTo,
+                currentEmailId: currentEmailId,
+                accessToken: accessToken,
+                threadId: threadId
             }
             console.log("EmailContent::", emailContent)
             return emailContent

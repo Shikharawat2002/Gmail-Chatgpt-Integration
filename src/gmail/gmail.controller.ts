@@ -90,7 +90,10 @@ export class GmailController {
             to: to?.value,
             subject: subject?.value,
             reference: reference?.value,
-            replyTo: replyTo?.value
+            replyTo: replyTo?.value,
+            currentEmailId: email,
+            threadId: id,
+            accessToken: accessToken
           }
         }
       }
@@ -103,19 +106,20 @@ export class GmailController {
   @Post('send-email')
   async sendEmail(@Req() req,
     @Body() emailContent: any): Promise<AxiosResponse<any>> {
+    console.log("emailContent in send mail::", emailContent)
     const refererHeader = req.headers['referer'];
-    if (refererHeader) {
-      // Extracting values from the Referer header
-      const refererUrl = new URL(refererHeader);
-      const httpContentId = refererUrl.searchParams.get('id');
-      const accessToken = refererUrl.searchParams.get('accessToken');
-      const email = refererUrl.searchParams.get('email')
-      console.log("email for middleware", email)
-      emailContent.threadId = httpContentId;
-      emailContent.accessToken = accessToken;
-      emailContent.email = email;
-      // console.log("EmailContent", emailContent)
-    }
+    // if (refererHeader) {
+    //   // Extracting values from the Referer header
+    //   const refererUrl = new URL(refererHeader);
+    //   const httpContentId = refererUrl.searchParams.get('id');
+    //   const accessToken = refererUrl.searchParams.get('accessToken');
+    //   const email = refererUrl.searchParams.get('email')
+    //   console.log("email for middleware", email)
+    //   emailContent.threadId = httpContentId;
+    //   emailContent.accessToken = accessToken;
+    //   emailContent.email = email;
+    //   // console.log("EmailContent", emailContent)
+    // }
     return this.gmailSendService.sendMail(emailContent);
   }
 
