@@ -19,7 +19,15 @@
             margin: 4px;
         }
 
-        .mail-item {}
+        .details {
+            background-color: antiquewhite;
+            padding: 20px;
+            margin: 4px;
+        }
+
+        .hidden {
+            display: none;
+        }
 
         button {
             background-color: rgb(41, 41, 162);
@@ -34,10 +42,19 @@
 </head>
 
 <body>
-    <h1>Conversation</h1>
     <div class=".mails">
+        <div class="details">
+            <h3> From::<span class="from"> {{message.from}}</span></h3>
+            <h3> To:: <span class="to">{{message.to}}</span></h3>
+            <h3>Subject::<span class="subject">{{message.subject}}</span></h3>
+            <h3>Current Email ID::<span class="currentEmailId">{{message.currentEmailId}}</span></h3>
+            <h3>threadId::<span class="threadId">{{message.threadId}}</span></h3>
+            <h3>accessToken::<span class="accessToken">{{message.accessToken}}</span></h3>
+            <h3 class="hidden">reference::<span class="reference">{{message.reference}}</span></h3>
+            <h3 class="hidden">replyTo::<span class="replyTo">{{message.replyTo}}</span></h3>
+        </div>
         <ol>
-            {{#each message}}
+            {{#each message.result}}
             <li>
                 <p class="mail-item">{{this}}</p>
                 <br>
@@ -50,27 +67,18 @@
         <div id="new"></div>
 
     </div>
-
     <script>
         function handleResponse() {
             var messages = document.querySelectorAll('.mail-item');
-            console.log("Message", messages);
-
-            if (messages.length > 0) {
-                var concatenatedMessage = Array.from(messages).map(function (message) {
-                    return message.textContent.trim();
-                }).join();
-                handleGenerateResponse(concatenatedMessage)
-
-                console.log("Concatenated Message:", concatenatedMessage);
-            } else {
-                console.error("No elements with the class 'mail-item' found");
-            }
-
+            const latestConversation = messages[messages.length - 1].textContent
+            var concatenatedMessage = Array.from(messages).map(function (message) {
+                return message.textContent.trim();
+            }).join();
+            handleGenerateResponse(latestConversation)
         }
 
-        async function handleGenerateResponse(concatenatedMessage) {
-            console.log("handleGenerateResponse")
+
+        async function handleGenerateResponse(latestConversation) {
             try {
                 const prompt = document.getElementById('promptInput').value;
                 if (!prompt) {
@@ -79,10 +87,9 @@
                 }
                 const data = {
                     prompt: prompt,
-                    concatenatedMessage: concatenatedMessage,
+                    concatenatedMessage: latestConversation,
                 }
-                console.log("PROMPT::", prompt)
-                console.log("concatenatedMessage", concatenatedMessage)
+
                 fetch('/google/generate-response', {
                     method: 'POST',
                     headers: {
@@ -97,8 +104,6 @@
                         tag.appendChild(textNode); // Append the text node to the paragraph element
                         var element = document.getElementById("new");
                         element.appendChild(tag);
-
-
                     })
                     .catch(function (error) {
                         console.log('error', error)
@@ -106,29 +111,158 @@
             } catch (error) {
                 console.error('Error:', error);
             }
-            createSendButton(concatenatedMessage, 'rawatsikha111@gmail.com')
+
+            createSendButton()
         }
 
-        function createSendButton(concatenatedMessage) {
-            console.log("createButton")
+        function createSendButton() {
+
             let button = document.createElement('button')
             button.textContent = 'send';
             document.body.appendChild(button);
-            button.addEventListener('click', function () { handleSendResponse(concatenatedMessage) })
+            button.addEventListener('click', function () { handleSendResponse() })
         }
-        function handleSendResponse(concatenatedMessage) {
-            console.log("handleSendResponse")
-            console.log("concatenatedMessage", concatenatedMessage);
+
+        //fetch chatgpt response
+        function getChatResponse() {
+            const chatId = document.getElementById('new')
+            const chatAddress = chatId.querySelector("p")
+            const chatText = chatAddress.textContent;
+            return chatText;
+        }
+
+        //get to
+        function getTo() {
+            const toAddress = document.querySelector(".to")
+            const toText = toAddress.textContent;
+            console.log("to:::", toText)
+            return toText;
+        }
+
+        //get from 
+        function getFrom() {
+            const toFrom = document.querySelector(".from")
+            const from = toFrom.textContent;
+            console.log("from:::", from)
+            return from;
+        }
+
+        //get subject
+        function getSubject() {
+            const subjectAddress = document.querySelector(".subject")
+            const subjectText = subjectAddress.textContent;
+            console.log("subject:::", subjectText)
+            return subjectText;
+        }
+
+        function getReference() {
+            const referenceAddress = document.querySelector(".reference")
+            const subjectText = referenceAddress.textContent;
+            console.log("reference:::", subjectText)
+            return subjectText;
+        }
+
+        function getReplyTo() {
+            const subjectAddress = document.querySelector(".replyTo")
+            const subjectText = subjectAddress.textContent;
+
+            console.log("replyTo:::", subjectText)
+            return subjectText;
+        }
+
+        function getAccessToken() {
+            const address = document.querySelector('.accessToken')
+            const accessToken = address.textContent;
+            console.log("accessTOken form get function::", accessToken)
+            return accessToken;
+        }
+
+        function getCurrentEmailId() {
+            const address = document.querySelector('.currentEmailId')
+            const currentEmailId = address.textContent;
+            console.log("current Email from get methood::", currentEmailId)
+            return currentEmailId;
+        }
+
+        function getThreadId() {
+            const address = document.querySelector('.threadId')
+            const threadId = address.textContent;
+            console.log("threadID form get method::", threadId)
+        }
+        function emailContents() {
+            //get GPT REsponse
+            const chatgptResponse = getChatResponse();
+            console.log("chatgptREsponse::::", chatgptResponse)
+
+            //get To address
+            const to = getTo();
+
+            //get from 
+            const from = getFrom();
+
+            //get subject
+            const subject = getSubject()
+
+            //get accessToken
+            const accessToken = getAccessToken()
+
+            //get threadId
+            const threadId = getThreadId()
+
+            //get current email
+            const currentEmailId = getCurrentEmailId()
+
+            const reference = getReference()
+
+
+            const replyTo = getReplyTo()
+
             const emailContent = {
-                responseText: concatenatedMessage,
+                chatgptResponse: chatgptResponse,
+                to: trimStr(to),
+                from: trimStr(from),
+                subject: subject,
+                reference: reference,
+                replyTo: replyTo,
+                currentEmailId: currentEmailId,
+                accessToken: accessToken,
+                threadId: threadId
             }
-            fetch('/google/send-email?messageID=${messageID}&email=${email}&accessToken=${accessToken}', {
+            console.log("EmailContent::", emailContent)
+            return emailContent
+        }
+
+
+        //Send function
+        function handleSendResponse() {
+            const emailContent = emailContents()
+
+            fetch(`/google/send-email`, {
                 method: "Post",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(emailContent)
             })
+                .then(function (response) {
+                    console.log(response.json)
+                })
+
+
+        }
+
+        function trimStr(str) {
+            const emailRegex = /<([^>]+)>/; // Regular expression to match email address within <>
+
+            const match = str.match(emailRegex);
+            if (match && match[1]) {
+                const emailAddress = match[1];
+                return emailAddress;
+            } else {
+                console.log("Email address not found in the string.");
+                return str;
+            }
+
         }
 
     </script>

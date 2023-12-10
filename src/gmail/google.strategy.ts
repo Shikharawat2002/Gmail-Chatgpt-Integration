@@ -8,11 +8,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   constructor() {
     super({
+
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_SECRET,
       callbackURL: 'http://localhost:3000/google/redirect', //process.env.REDIRECT_URI,
-      scope: ['email', 'profile', 'https://mail.google.com/', 'https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.compose'],
-      passReqToCallback: false
+      scope: ['email', 'profile', 'https://www.googleapis.com/auth/gmail.settings.sharing','https://mail.google.com/', 'https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.compose', 'https://www.googleapis.com/auth/gmail.send'],
+      passReqToCallback: false,
+      access_type: 'offline',
+      prompt: 'consent',
 
     });
 
@@ -20,12 +23,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
 
   async validate(accessToken: any, refreshToken: any, profile: any, done: VerifyCallback): Promise<any> {
-    // console.log("AccessToken", accessToken);
-    // console.log("Profile", profile);
-    // const queryParams = url.parse(accessToken.url, true).query;
-    // console.log("QueryParams", queryParams)
-    console.log("RefreshToken:::", refreshToken);
-    const { name, emails, picture } = profile
+    const { name, emails } = profile
+    console.log("profile", profile)
+    console.log('refreshToken before:::', refreshToken)
     const user = {
       email: emails[0].value,
       firstName: name.givenName,
@@ -33,7 +33,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       accessToken,
       refreshToken
     }
-    done(null, user);
+    console.log("RefreshToken:::", refreshToken);
+    console.log("accessToken", accessToken)
+    return done(null, user);
   }
 }
 
