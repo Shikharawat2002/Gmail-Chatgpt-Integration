@@ -63,25 +63,23 @@ export class GmailController {
     @Query('email') email: string,
   ) {
     try {
-      // const result = await this.gmailInboxService.getThreadMessage(id, accessToken);
-      // console.log("id on threads::", id);
-      // console.log("accessToken thread", accessToken);
-      // console.log("email thread", email);
+
       const details = await this.gmailInboxService.getUserDetails(id, accessToken, email);
-      // console.log('details::', details)
-      // console.log("details.data", details)
       const temp = details?.data?.messages;
 
       // const from = temp[temp.length - 1]?.payload.headers.filter((From) => From.name === 'From')
+      
       if (temp) {
         const from = temp[temp.length - 1]?.payload.headers.find((From) => From.name === 'From')
         const to = temp[temp.length - 1]?.payload.headers.find((To) => To.name === 'To')
         const subject = temp[temp.length - 1]?.payload.headers.find((Subject) => Subject.name === 'Subject')
+        const Message_Id = temp[temp.length - 1]?.payload.headers.find((Message_Id) => Message_Id.name === 'Message-ID')
         const reference = temp[temp.length - 1]?.payload.headers.find((References) => References.name === 'References')
         const replyTo = temp[temp.length - 1]?.payload.headers.find((replyTo) => replyTo.name === 'In-Reply-To')
-        console.log("From:::::", from?.value)
-        console.log("To::::", to?.value)
-        console.log("subject::::", subject?.value)
+        // const returnReply = temp[temp.length - 1]?.payload.headers.find((returnReply) => returnReply.name === 'Reply-To')
+        // console.log("From:::::", from?.value)
+        // console.log("To::::", to?.value)
+        // console.log("subject::::", subject?.value)
         // console.log("details.message", details.message)
         return {
           message: {
@@ -91,6 +89,8 @@ export class GmailController {
             subject: subject?.value,
             reference: reference?.value,
             replyTo: replyTo?.value,
+            Message_Id: Message_Id?.value,
+            // returnReply:returnReply?.value,
             currentEmailId: email,
             threadId: id,
             accessToken: accessToken
@@ -132,10 +132,6 @@ export class GmailController {
     return { messageResponse: response };
   }
 }
-
-
-
-
 
 //   @Get('/test')
 //   @Render('test.hbs')

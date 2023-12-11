@@ -63,6 +63,7 @@ export class GmailSendService {
 
   async sendMail(emailContent: any): Promise<any> {
     try {
+      console.log("emaildata:?:", emailContent)
       let deliverTo;
       if (emailContent.currentEmailId === emailContent.to) {
         deliverTo = emailContent.from;
@@ -77,6 +78,7 @@ export class GmailSendService {
       const emailPayload = `From: ${userId}
 To: ${deliverTo}
 Subject: ${emailContent.subject}
+Message-ID: ${emailContent.Message_ID}
 In-Reply-To: ${emailContent.inReplyTo}
 References: ${emailContent.reference}
 Content-Type: text/plain; charset="UTF-8"

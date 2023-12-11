@@ -14,14 +14,18 @@
         }
 
         .mails {
-            background-color: rgb(255, 216, 126);
+            padding: 20px;
+            margin: 4px;
+        }
+
+        .mail-item {
+            background-color: rgb(222, 222, 222);
             padding: 20px;
             margin: 4px;
         }
 
         .details {
-            background-color: antiquewhite;
-            padding: 20px;
+            padding-left: 45px;
             margin: 4px;
         }
 
@@ -29,11 +33,20 @@
             display: none;
         }
 
+        .response {
+            display: flex;
+            padding-left: 45px;
+            margin: 4px;
+        }
+
+
         button {
             background-color: rgb(41, 41, 162);
             font-size: larger;
             color: white;
+            margin-left: 45px;
         }
+
 
         #promptInput {
             width: 600px;
@@ -44,14 +57,17 @@
 <body>
     <div class=".mails">
         <div class="details">
-            <h3> From::<span class="from"> {{message.from}}</span></h3>
-            <h3> To:: <span class="to">{{message.to}}</span></h3>
-            <h3>Subject::<span class="subject">{{message.subject}}</span></h3>
-            <h3>Current Email ID::<span class="currentEmailId">{{message.currentEmailId}}</span></h3>
-            <h3>threadId::<span class="threadId">{{message.threadId}}</span></h3>
-            <h3>accessToken::<span class="accessToken">{{message.accessToken}}</span></h3>
-            <h3 class="hidden">reference::<span class="reference">{{message.reference}}</span></h3>
-            <h3 class="hidden">replyTo::<span class="replyTo">{{message.replyTo}}</span></h3>
+            <p> From-<span class="from"> {{message.from}}</span></p>
+            <p> To-<span class="to">{{message.to}}</span></p>
+            <p>Subject-<span class="subject">{{message.subject}}</span></p>
+            <p class="hidden">Current Email ID::<span class="currentEmailId">{{message.currentEmailId}}</span></p>
+            <p class="hidden">threadId::<span class="threadId">{{message.threadId}}</span></p>
+            <p class="hidden">accessToken::<span class="accessToken">{{message.accessToken}}</span></p>
+            <p class="hidden">reference::<span class="reference">{{message.reference}}</span></p>
+            <p class="hidden">replyTo::<span class="replyTo">{{message.replyTo}}</span></p>
+            <p class="hidden"> Message_Id::<span class=" Message_Id">{{message.Message_Id}}</span></p>
+            <p class="hidden"> returnReply::<span class=" returnReply">{{message.returnReply}}</span></p>
+
         </div>
         <ol>
             {{#each message.result}}
@@ -61,10 +77,13 @@
             </li>
             {{/each}}
         </ol>
-        <input type="text" id="promptInput"
-            value=" You are Email Automation Specialist  generate a reply for this mail">
-        <button onclick="handleResponse()">Response</button>
-        <div id="new"></div>
+        <div class="response">
+            <textarea name="" id="promptInput" cols="30"
+                rows="3">Your role is to generate response for this conversation</textarea>
+            <button onclick="handleResponse()">Response</button>
+        </div>
+        <div id="new" class="response"></div>
+
 
     </div>
     <script>
@@ -77,7 +96,7 @@
             handleGenerateResponse(latestConversation)
         }
 
-
+        let sendButton = false;
         async function handleGenerateResponse(latestConversation) {
             try {
                 const prompt = document.getElementById('promptInput').value;
@@ -99,11 +118,17 @@
                 })
                     .then(async function (res) {
                         const response = await res.json();
+                        var element = document.getElementById("new");
+                        element.innerHTML = '';
                         var tag = document.createElement("p");
                         var textNode = document.createTextNode(response.messageResponse); // Create a text node
                         tag.appendChild(textNode); // Append the text node to the paragraph element
                         var element = document.getElementById("new");
                         element.appendChild(tag);
+                        if (sendButton === false) {
+                            sendButton = createSendButton();
+                            sendButton = true
+                        }
                     })
                     .catch(function (error) {
                         console.log('error', error)
@@ -111,12 +136,9 @@
             } catch (error) {
                 console.error('Error:', error);
             }
-
-            createSendButton()
         }
 
         function createSendButton() {
-
             let button = document.createElement('button')
             button.textContent = 'send';
             document.body.appendChild(button);
@@ -189,6 +211,18 @@
             const threadId = address.textContent;
             console.log("threadID form get method::", threadId)
         }
+
+        function getMessageID() {
+            const address = document.querySelector('.Message_Id')
+            const Message_Id = address.textContent;
+            console.log("messageId from get method::", Message_Id)
+        }
+
+        function getReturnReply() {
+            const address = document.querySelector('.returnReply')
+            const returnReply = address.textContent;
+            console.log("messageId from get method::", returnReply)
+        }
         function emailContents() {
             //get GPT REsponse
             const chatgptResponse = getChatResponse();
@@ -217,6 +251,10 @@
 
             const replyTo = getReplyTo()
 
+            const Message_Id = getMessageID()
+
+            const returnReply = getReturnReply()
+
             const emailContent = {
                 chatgptResponse: chatgptResponse,
                 to: trimStr(to),
@@ -224,6 +262,7 @@
                 subject: subject,
                 reference: reference,
                 replyTo: replyTo,
+                Message_Id: Message_Id,
                 currentEmailId: currentEmailId,
                 accessToken: accessToken,
                 threadId: threadId
@@ -246,9 +285,8 @@
             })
                 .then(function (response) {
                     console.log(response.json)
+                    alert("Sent successfully!")
                 })
-
-
         }
 
         function trimStr(str) {
