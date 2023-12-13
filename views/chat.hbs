@@ -77,8 +77,8 @@
 
                 <p>To-<span class="to">{{this.to}}</sp></span>
 
-                    <p class="mail-item">{{this.message}}</p>
-                    <br>
+                <p class="mail-item">{{this.message}}</p>
+                <br>
             </li>
             {{/each}}
         </ol>
@@ -216,6 +216,7 @@
             const address = document.querySelector('.threadId')
             const threadId = address.textContent;
             console.log("threadID form get method::", threadId)
+            return threadId;
         }
 
         function getMessageID() {

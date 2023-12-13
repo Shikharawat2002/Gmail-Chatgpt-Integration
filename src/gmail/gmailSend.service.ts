@@ -70,7 +70,6 @@ export class GmailSendService {
       } else {
         deliverTo = emailContent.to;
       }
-      console.log("deliverTo::", deliverTo)
       const userId = emailContent.currentEmailId;
 
       // Construct the RFC822 formatted email payload
@@ -78,6 +77,7 @@ export class GmailSendService {
 To: ${deliverTo}
 Subject: ${emailContent.subject}
 Message-ID: ${emailContent.Message_ID}
+replyTo: 'sonu@ailoitte.com'
 In-Reply-To: ${emailContent.inReplyTo}
 References: ${emailContent.reference}
 Content-Type: text/plain; charset="UTF-8"
@@ -91,6 +91,7 @@ ${emailContent.chatgptResponse}`;
       // Construct the request payload
       const requestPayload = {
         raw: encodedEmailContent,
+        threadId: emailContent.threadId
       };
 
       const response = await fetch(
