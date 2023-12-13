@@ -63,45 +63,68 @@ export class GmailController {
     @Query('email') email: string,
   ) {
     try {
-
       const details = await this.gmailInboxService.getUserDetails(id, accessToken, email);
       const temp = details?.data?.messages;
 
-      // const from = temp[temp.length - 1]?.payload.headers.filter((From) => From.name === 'From')
-      
       if (temp) {
-        const from = temp[temp.length - 1]?.payload.headers.find((From) => From.name === 'From')
-        const to = temp[temp.length - 1]?.payload.headers.find((To) => To.name === 'To')
-        const subject = temp[temp.length - 1]?.payload.headers.find((Subject) => Subject.name === 'Subject')
-        const Message_Id = temp[temp.length - 1]?.payload.headers.find((Message_Id) => Message_Id.name === 'Message-ID')
-        const reference = temp[temp.length - 1]?.payload.headers.find((References) => References.name === 'References')
-        const replyTo = temp[temp.length - 1]?.payload.headers.find((replyTo) => replyTo.name === 'In-Reply-To')
-        // const returnReply = temp[temp.length - 1]?.payload.headers.find((returnReply) => returnReply.name === 'Reply-To')
-        // console.log("From:::::", from?.value)
-        // console.log("To::::", to?.value)
-        // console.log("subject::::", subject?.value)
-        // console.log("details.message", details.message)
+        const from = [];
+        const to = [];
+
+        for (let i = 0; i < temp.length; i++) {
+          const iterator = temp[i]?.payload?.headers;
+
+          // Use find instead of filter, and then access the value property
+          const fromHeader = iterator.find((header) => header.name === 'From');
+          from.push(fromHeader?.value ?? '');
+
+          // The same applies to 'To' header
+          const toHeader = iterator.find((header) => header.name === 'To');
+          to.push(toHeader?.value ?? '');
+        }
+
+        const lastMessage = temp[temp.length - 1]?.payload?.headers;
+
+        // Access headers safely, provide default values if they are undefined
+        const subject = lastMessage?.find((header) => header.name === 'Subject')?.value ?? '';
+        const Message_Id = lastMessage?.find((header) => header.name === 'Message-ID')?.value ?? '';
+        const reference = lastMessage?.find((header) => header.name === 'References')?.value ?? '';
+        const replyTo = lastMessage?.find((header) => header.name === 'In-Reply-To')?.value ?? '';
+
+        console.log("From:::::", from);
+        console.log("To::::", to);
+        console.log("subject::::", subject);
+
+        const res = [];
+        for (let i = 0; i < details?.message.length; i++) {
+          const resFrom = from[i] ?? '';
+          const resTo = to[i] ?? '';
+
+          res.push({
+            from: resFrom,
+            to: resTo,
+            message: details.message[i]
+          });
+        }
+
         return {
           message: {
-            result: details?.message,
-            from: from?.value,
-            to: to?.value,
-            subject: subject?.value,
-            reference: reference?.value,
-            replyTo: replyTo?.value,
-            Message_Id: Message_Id?.value,
-            // returnReply:returnReply?.value,
+            subject: subject,
+            reference: reference,
+            replyTo: replyTo,
+            Message_Id: Message_Id,
             currentEmailId: email,
             threadId: id,
             accessToken: accessToken
-          }
-        }
+          },
+          res
+        };
       }
     } catch (error) {
       console.error(error);
       return { message: 'Error fetching messages' };
     }
   }
+
 
   @Post('send-email')
   async sendEmail(@Req() req,

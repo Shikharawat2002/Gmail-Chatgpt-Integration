@@ -71,7 +71,6 @@ export class GmailSendService {
         deliverTo = emailContent.to;
       }
       console.log("deliverTo::", deliverTo)
-      // Replace {userId} with the actual email address of the user
       const userId = emailContent.currentEmailId;
 
       // Construct the RFC822 formatted email payload

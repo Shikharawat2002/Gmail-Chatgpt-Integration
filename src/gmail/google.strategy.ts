@@ -16,7 +16,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       passReqToCallback: false,
       access_type: 'offline',
       prompt: 'consent',
-
     });
 
   }

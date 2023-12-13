@@ -57,9 +57,8 @@
 <body>
     <div class=".mails">
         <div class="details">
-            <p> From-<span class="from"> {{message.from}}</span></p>
-            <p> To-<span class="to">{{message.to}}</span></p>
-            <p>Subject-<span class="subject">{{message.subject}}</span></p>
+
+            <h3>Subject-<span class="subject">{{message.subject}}</span></h3>
             <p class="hidden">Current Email ID::<span class="currentEmailId">{{message.currentEmailId}}</span></p>
             <p class="hidden">threadId::<span class="threadId">{{message.threadId}}</span></p>
             <p class="hidden">accessToken::<span class="accessToken">{{message.accessToken}}</span></p>
@@ -70,10 +69,16 @@
 
         </div>
         <ol>
-            {{#each message.result}}
+            {{#each this.res}}
             <li>
-                <p class="mail-item">{{this}}</p>
-                <br>
+                {{!-- <h3> From::<span class="from"> {{message.from}}</span></h3>
+                <h3> To:: <span class="to">{{message.to}}</span></h3> --}}
+                <p>From-<span class="from">{{this.from}}</span></p>
+
+                <p>To-<span class="to">{{this.to}}</sp></span>
+
+                    <p class="mail-item">{{this.message}}</p>
+                    <br>
             </li>
             {{/each}}
         </ol>
@@ -139,6 +144,7 @@
         }
 
         function createSendButton() {
+            console.log("button created")
             let button = document.createElement('button')
             button.textContent = 'send';
             document.body.appendChild(button);
@@ -274,8 +280,9 @@
 
         //Send function
         function handleSendResponse() {
+            console.log("button clicked")
             const emailContent = emailContents()
-
+            console.log("EmailContent", emailContent)
             fetch(`/google/send-email`, {
                 method: "Post",
                 headers: {
@@ -295,6 +302,7 @@
             const match = str.match(emailRegex);
             if (match && match[1]) {
                 const emailAddress = match[1];
+                console.log("after trim::", emailAddress)
                 return emailAddress;
             } else {
                 console.log("Email address not found in the string.");
