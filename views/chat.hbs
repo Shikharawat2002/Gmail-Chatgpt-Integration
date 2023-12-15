@@ -4,105 +4,119 @@
 <head>
     <meta charset="utf-8" />
     <title>App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        body {
-            margin: 50px;
+        pre {
+            white-space: pre-wrap;
         }
-
-        h1 {
-            text-align: center;
-        }
-
-        .mails {
-            padding: 20px;
-            margin: 4px;
-        }
-
-        .mail-item {
-            background-color: rgb(222, 222, 222);
-            padding: 20px;
-            margin: 4px;
-        }
-
-        .details {
-            padding-left: 45px;
-            margin: 4px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .response {
-            display: flex;
-            padding-left: 45px;
-            margin: 4px;
-        }
-
 
         button {
-            background-color: rgb(41, 41, 162);
-            font-size: larger;
-            color: white;
-            margin-left: 45px;
+            padding: 0.5rem 1rem;
+            background-color: #28a745;
+            margin-left: 4rem;
+            /* Bootstrap success color */
+            color: #fff;
+            /* White text */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            /* Smooth transition on hover */
         }
 
+        .response-style {
+            margin-left: 8px;
+        }
 
-        #promptInput {
-            width: 600px;
+        .response textarea {
+            margin: 22px;
+            padding: 12px;
+        }
+
+        /* Hover effect for the send button */
+        button:hover {
+            background-color: #218838;
+            /* Darker shade on hover */
         }
     </style>
 </head>
 
-<body>
-    <div class=".mails">
-        <div class="details">
+<body class="p-3 m-4 bg-body-secondary">
 
-            <h3>Subject-<span class="subject">{{message.subject}}</span></h3>
-            <p class="hidden">Current Email ID::<span class="currentEmailId">{{message.currentEmailId}}</span></p>
-            <p class="hidden">threadId::<span class="threadId">{{message.threadId}}</span></p>
-            <p class="hidden">accessToken::<span class="accessToken">{{message.accessToken}}</span></p>
-            <p class="hidden">reference::<span class="reference">{{message.reference}}</span></p>
-            <p class="hidden">replyTo::<span class="replyTo">{{message.replyTo}}</span></p>
-            <p class="hidden"> Message_Id::<span class=" Message_Id">{{message.Message_Id}}</span></p>
-            <p class="hidden"> returnReply::<span class=" returnReply">{{message.returnReply}}</span></p>
+    <div class=".mails ">
+        <div class="details">
+            <h2 class=" m-5 text-center">Subject <span class="subject">{{message.subject}}</span></h2>
+            <div class="visually-hidden">
+                <p class="hidden">Current Email ID::<span class="currentEmailId">{{message.currentEmailId}}</span>
+                </p>
+                <p class="hidden">threadId::<span class="threadId">{{message.threadId}}</span></p>
+                <p class="hidden">accessToken::<span class="accessToken">{{message.accessToken}}</span></p>
+                <p class="hidden">reference::<span class="reference">{{message.reference}}</span></p>
+                <p class="hidden">replyTo::<span class="replyTo">{{message.replyTo}}</span></p>
+                <p class="hidden"> Message_Id::<span class=" message_Id">{{message.Message_Id}}</span></p>
+                <p class="hidden"> returnReply::<span class=" returnReply">{{message.returnReply}}</span></p>
+            </div>
+
 
         </div>
         <ol>
             {{#each this.res}}
-            <li>
-                {{!-- <h3> From::<span class="from"> {{message.from}}</span></h3>
-                <h3> To:: <span class="to">{{message.to}}</span></h3> --}}
-                <p>From-<span class="from">{{this.from}}</span></p>
 
-                <p>To-<span class="to">{{this.to}}</sp></span>
+            <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+                <h6>From- <span class="from"> {{this.from}}</span></h6>
+                <h6>To- <span class="to"> {{this.to}}</sp></span>
+                    <div class="shadow-none p-3 bg-body-tertiary rounded">
+                        <pre
+                            class=" bg-body-secondary  p-3 rounded mail-item overflow-hidden w-100">{{this.message}}</pre>
+                    </div>
+                    <br>
+            </div>
 
-                <p class="mail-item">{{this.message}}</p>
-                <br>
-            </li>
             {{/each}}
+
         </ol>
-        <div class="response">
-            <textarea name="" id="promptInput" cols="30"
-                rows="3">Your role is to generate response for this conversation</textarea>
-            <button onclick="handleResponse()">Response</button>
+        <div class="response-style">
+            {{!-- prompt --}}
+            <div class="d-flex">
+                <textarea class="p-2 w-100 ms-4" id="promptInput" cols="30"
+                    rows="1"> Write response for this mail</textarea>
+                <button type="button" class="btn btn-primary p-2 flex-shrink-1"
+                    onclick="handleResponse()">Response</button>
+            </div>
+            {{!-- response --}}
+            <div id="new" class="response"></div>
         </div>
-        <div id="new" class="response"></div>
-
-
     </div>
+
+    {{!-- bootstrap js --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    {{!-- js script --}}
     <script>
+
+
+
+        let sendButton = false;
+
+        // geting all response to generate response
         function handleResponse() {
             var messages = document.querySelectorAll('.mail-item');
-            const latestConversation = messages[messages.length - 1].textContent
+            const conversation = messages[messages.length - 1].textContent
             var concatenatedMessage = Array.from(messages).map(function (message) {
                 return message.textContent.trim();
             }).join();
-            handleGenerateResponse(latestConversation)
+            handleGenerateResponse(concatenatedMessage)
+
         }
 
-        let sendButton = false;
-        async function handleGenerateResponse(latestConversation) {
+
+
+        // generate function 
+        async function handleGenerateResponse(conversation) {
+            console.log("conversation::", conversation)
             try {
                 const prompt = document.getElementById('promptInput').value;
                 if (!prompt) {
@@ -111,9 +125,9 @@
                 }
                 const data = {
                     prompt: prompt,
-                    concatenatedMessage: latestConversation,
+                    concatenatedMessage: conversation,
                 }
-
+                //fetch response 
                 fetch('/google/generate-response', {
                     method: 'POST',
                     headers: {
@@ -123,15 +137,24 @@
                 })
                     .then(async function (res) {
                         const response = await res.json();
+
                         var element = document.getElementById("new");
+                        // check if previous response 
                         element.innerHTML = '';
-                        var tag = document.createElement("p");
-                        var textNode = document.createTextNode(response.messageResponse); // Create a text node
-                        tag.appendChild(textNode); // Append the text node to the paragraph element
+                        // create tag to add response
+                        var tag = document.createElement("textarea");
+                        tag.cols = 188
+                        tag.rows = 10
+
+                        var textNode = document.createTextNode(response.messageResponse);
+                        tag.appendChild(textNode);
+
                         var element = document.getElementById("new");
                         element.appendChild(tag);
+
+                        //create send button 
                         if (sendButton === false) {
-                            sendButton = createSendButton();
+                            sendButton = createButton("Reply");
                             sendButton = true
                         }
                     })
@@ -142,125 +165,56 @@
                 console.error('Error:', error);
             }
         }
+        function getTextContentBySelector(selector) {
+            const element = document.querySelector(selector);
+            return element ? element.textContent : '';
+        }
 
-        function createSendButton() {
-            console.log("button created")
+        function createButton(btn) {
             let button = document.createElement('button')
-            button.textContent = 'send';
+            button.textContent = btn;
             document.body.appendChild(button);
             button.addEventListener('click', function () { handleSendResponse() })
         }
-
         //fetch chatgpt response
         function getChatResponse() {
-            const chatId = document.getElementById('new')
-            const chatAddress = chatId.querySelector("p")
-            const chatText = chatAddress.textContent;
-            return chatText;
+            const address = document.querySelector("#new textarea");
+            const text = address.value;
+            console.log("chatgptResponse::::", text);
+            return text;
         }
 
-        //get to
-        function getTo() {
-            const toAddress = document.querySelector(".to")
-            const toText = toAddress.textContent;
-            console.log("to:::", toText)
-            return toText;
-        }
-
-        //get from 
-        function getFrom() {
-            const toFrom = document.querySelector(".from")
-            const from = toFrom.textContent;
-            console.log("from:::", from)
-            return from;
-        }
-
-        //get subject
-        function getSubject() {
-            const subjectAddress = document.querySelector(".subject")
-            const subjectText = subjectAddress.textContent;
-            console.log("subject:::", subjectText)
-            return subjectText;
-        }
-
-        function getReference() {
-            const referenceAddress = document.querySelector(".reference")
-            const subjectText = referenceAddress.textContent;
-            console.log("reference:::", subjectText)
-            return subjectText;
-        }
-
-        function getReplyTo() {
-            const subjectAddress = document.querySelector(".replyTo")
-            const subjectText = subjectAddress.textContent;
-
-            console.log("replyTo:::", subjectText)
-            return subjectText;
-        }
-
-        function getAccessToken() {
-            const address = document.querySelector('.accessToken')
-            const accessToken = address.textContent;
-            console.log("accessTOken form get function::", accessToken)
-            return accessToken;
-        }
-
-        function getCurrentEmailId() {
-            const address = document.querySelector('.currentEmailId')
-            const currentEmailId = address.textContent;
-            console.log("current Email from get methood::", currentEmailId)
-            return currentEmailId;
-        }
-
-        function getThreadId() {
-            const address = document.querySelector('.threadId')
-            const threadId = address.textContent;
-            console.log("threadID form get method::", threadId)
-            return threadId;
-        }
-
-        function getMessageID() {
-            const address = document.querySelector('.Message_Id')
-            const Message_Id = address.textContent;
-            console.log("messageId from get method::", Message_Id)
-        }
-
-        function getReturnReply() {
-            const address = document.querySelector('.returnReply')
-            const returnReply = address.textContent;
-            console.log("messageId from get method::", returnReply)
-        }
         function emailContents() {
             //get GPT REsponse
             const chatgptResponse = getChatResponse();
-            console.log("chatgptREsponse::::", chatgptResponse)
 
             //get To address
-            const to = getTo();
+            const to = getTextContentBySelector(".to");
 
             //get from 
-            const from = getFrom();
+            const from = getTextContentBySelector(".from");
 
             //get subject
-            const subject = getSubject()
+            const subject = getTextContentBySelector(".subject")
 
             //get accessToken
-            const accessToken = getAccessToken()
+            const accessToken = getTextContentBySelector(".accessToken")
 
             //get threadId
-            const threadId = getThreadId()
+            const threadId = getTextContentBySelector(".threadId")
 
             //get current email
-            const currentEmailId = getCurrentEmailId()
+            const currentEmailId = getTextContentBySelector(".currentEmailId")
 
-            const reference = getReference()
+            const reference = getTextContentBySelector(".reference")
 
+            //get reply to 
+            const replyTo = getTextContentBySelector('.replyTo')
 
-            const replyTo = getReplyTo()
+            //get message id
+            const Message_Id = getTextContentBySelector('.message_Id')
 
-            const Message_Id = getMessageID()
-
-            const returnReply = getReturnReply()
+            const returnReply = getTextContentBySelector('.returnReply')
 
             const emailContent = {
                 chatgptResponse: chatgptResponse,

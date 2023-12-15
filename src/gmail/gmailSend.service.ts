@@ -123,7 +123,7 @@ ${emailContent.chatgptResponse}`;
     return this.openai.completions.create({
       prompt: prompt + input,
       max_tokens: 600,
-      model: 'text-davinci-002'
+      model: 'text-davinci-003'
     })
       .then((response) => {
         // console.log("Response.choice", response.choices[0].text)
